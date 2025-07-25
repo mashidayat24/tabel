@@ -1,18 +1,642 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="style.css">
-    <title>Pos Jaga Batur</title>
+    <title>PJ Batur</title>
+    <style>
+        :root {
+            --primary-blue: #1e88e5;
+            --light-blue: #bbdefb;
+            --white: #ffffff;
+            --dark-blue: #0d47a1;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--light-blue);
+            color: #333;
+            line-height: 1.6;
+            width: 100%;
+            margin: 0;
+            overflow-x: hidden;
+        }
+
+        header {
+            background-color: var(--primary-blue);
+            color: var(--white);
+            padding: 0.75rem 1rem;
+            text-align: center;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        
+        header .admin-controls {
+            margin-top: 0.5rem;
+        }
+
+        .container {
+            padding: 1rem 0;
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .nav-container {
+            background-color: var(--white);
+            border-radius: 5px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            min-height: fit-content;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .nav-buttons {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: 0.5rem;
+            margin: 0;
+            width: 100%;
+        }
+
+        .nav-buttons button {
+            background-color: var(--light-blue);
+            border: 1px solid var(--primary-blue);
+            color: var(--dark-blue);
+            padding: 0.75rem 0.5rem;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+            width: 100%;
+            min-height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .nav-buttons button:hover {
+            background-color: var(--primary-blue);
+            color: var(--white);
+        }
+
+        .nav-buttons button {
+            height: 40px;
+            display: flex;
+            align-items: center;
+        }
+
+        .admin-controls {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+        }
+
+        .admin-login-btn, .admin-logout-btn {
+            background-color: var(--dark-blue);
+            color: white;
+            border: none;
+            padding: 0.25rem 0.75rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.9rem;
+        }
+
+        .admin-panel {
+            display: none;
+            background-color: var(--white);
+            padding: 1rem;
+            border-radius: 5px;
+            margin-bottom: 1rem;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .table-container {
+            background-color: var(--white);
+            border-radius: 5px;
+            padding: 1rem;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+
+        th, td {
+            padding: 0.75rem;
+            text-align: left;
+            border-bottom: 1px solid var(--light-blue);
+            border-right: 1px solid var(--light-blue);
+        }
+        td:nth-child(3), td:nth-child(4) {
+            text-align: center;
+        }
+
+        th {
+            background-color: var(--primary-blue);
+            color: var(--white);
+            position: sticky;
+            top: 0;
+        }
+
+        th:last-child, td:last-child {
+            border-right: none;
+        }
+
+        tr:hover {
+            background-color: rgba(30, 136, 229, 0.1);
+        }
+
+        /* Edit modal styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+
+        .modal-content {
+            background-color: var(--white);
+            margin: 10% auto;
+            padding: 1rem;
+            border-radius: 5px;
+            width: 80%;
+            max-width: 600px;
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .close:hover {
+            color: black;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: bold;
+        }
+
+        .form-group input, .form-group textarea {
+            width: 100%;
+            padding: 0.5rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        .save-btn {
+            background-color: var(--primary-blue);
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        /* Responsive styles */
+        @media (max-width: 768px) {
+            th, td {
+                padding: 0.5rem;
+                font-size: 0.9rem;
+            }
+
+            .nav-buttons {
+                justify-content: center;
+            }
+
+            .modal-content {
+                width: 95%;
+                margin: 20% auto;
+            }
+        }
+
+        @media (max-width: 480px) {
+            th, td {
+                padding: 0.3rem;
+                font-size: 0.8rem;
+            }
+        }
+    </style>
 </head>
 <body>
-    <nav>
-        <h1>Pos Jaga Batur</h1>
-        <ul id="navbar"></ul>
-        <a href="admin.html">Admin</a>
-    </nav>
-    <div id="table-container"></div>
-    <script src="script.js"></script>
+    <header>
+        <h1>PJ Batur</h1>
+        <div class="admin-controls">
+            <button class="admin-login-btn" onclick="toggleAdminLogin()">Kegiatan dan Monitoring Pekerjaan</button>
+            <button class="admin-logout-btn" onclick="logout()" style="display:none;">Logout</button>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="nav-container">
+
+            <div class="admin-panel" id="adminPanel">
+                <h2>Admin Panel</h2>
+                <div class="nav-buttons">
+                    <button onclick="uploadNewCSV()">Upload New CSV</button>
+                    <button onclick="showAddModal()">Add New Row</button>  
+                    <button onclick="editCurrentCSV()">Edit Current CSV</button>
+                    <button onclick="saveChanges()">Save Changes</button>
+                </div>
+            </div>
+
+            <div class="nav-buttons" id="fileButtons">
+                <!-- File buttons will be added here by JavaScript -->
+            </div>
+        </div>
+
+        <div class="table-container">
+            <h2 id="currentFile">Select a file to view</h2>
+            <div id="tableWrapper">
+                <!-- Table will be rendered here -->
+                <p>No file selected. Please choose a CSV file from the navigation above.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Login Modal -->
+    <div id="loginModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('loginModal')">&times;</span>
+            <h2>Admin Login</h2>
+            <div class="form-group">
+                <label for="username">Username:</label>
+                <input type="text" id="username" placeholder="Enter username">
+            </div>
+            <div class="form-group">
+                <label for="password">Password:</label>
+                <input type="password" id="password" placeholder="Enter password">
+            </div>
+            <button class="save-btn" onclick="login()">Login</button>
+        </div>
+    </div>
+
+    <!-- Edit Modal -->
+    <div id="editModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('editModal')">&times;</span>
+            <h2>Edit Data</h2>
+            <div id="editForm">
+                <!-- Form fields will be added here dynamically -->
+            </div>
+            <button class="save-btn" onclick="saveEdit()">Save Changes</button>
+        </div>
+    </div>
+
+    <script>
+        // Global variables
+        let currentCSV = null;
+        let currentFilename = '';
+        let csvData = [];
+        let isAdmin = false;
+
+        // On page load
+        document.addEventListener('DOMContentLoaded', function() {
+            // Load urban.csv by default
+            loadCSV('urban.csv');
+            // Also fetch available files
+            fetchCSVFiles();
+        });
+
+        // Fetch available CSV files
+        async function fetchCSVFiles() {
+            try {
+                // In a real application, you would fetch this from your server
+                // For this demo, we'll simulate it with a mock response
+                const mockFiles = ['data1.csv', 'data2.csv', 'employees.csv'];
+                const fileButtons = document.getElementById('fileButtons');
+                
+                fileButtons.innerHTML = '';
+                mockFiles.forEach(file => {
+                    const button = document.createElement('button');
+                    button.textContent = file.replace('.csv','');
+                    button.onclick = () => loadCSV(file);
+                    fileButtons.appendChild(button);
+                });
+            } catch (error) {
+                console.error('Error fetching CSV files:', error);
+            }
+        }
+
+        // Load and display CSV file
+        async function loadCSV(filename) {
+            try {
+                currentFilename = filename;
+                document.getElementById('currentFile').textContent = filename.replace('.csv','');
+                
+                // In a real application, you would fetch the CSV file content from your server
+                // For this demo, we'll simulate it with mock data based on filename
+                let mockData;
+                
+                if (filename === 'urban.csv') {
+                    mockData = `District,Area,Population,Density
+Central,20,50000,2500
+North,30,75000,2500
+South,25,62500,2500
+East,35,87500,2500
+West,40,100000,2500`;
+                } else if (filename === 'data1.csv') {
+                    mockData = `Name,Age,City,Occupation
+John Doe,30,New York,Developer
+Jane Smith,25,Los Angeles,Designer
+Robert Brown,40,Chicago,Manager`;
+                } else if (filename === 'data2.csv') {
+                    mockData = `Product,Price,Stock,Category
+Laptop,999,50,Electronics
+Phone,699,100,Electronics
+Mouse,25,200,Accessories`;
+                } else if (filename === 'employees.csv') {
+                    mockData = `ID,Name,Department,Salary
+E001,Alice Johnson,Marketing,55000
+E002,Bob Williams,Engineering,75000
+E003,Carol Davis,HR,60000`;
+                } else {
+                    mockData = `Column1,Column2,Column3
+Value1,Value2,Value3
+Value4,Value5,Value6`;
+                }
+                
+                currentCSV = mockData;
+                csvData = parseCSV(mockData);
+                renderTable(csvData);
+            } catch (error) {
+                console.error('Error loading CSV:', error);
+                document.getElementById('tableWrapper').innerHTML = `<p>Error loading file: ${filename}</p>`;
+            }
+        }
+
+        // Parse CSV string into array of objects
+        function parseCSV(csvString) {
+            const lines = csvString.split('\n');
+            const headers = lines[0].split(',');
+            const result = [];
+            
+            for (let i = 1; i < lines.length; i++) {
+                if (lines[i].trim() === '') continue;
+                
+                const obj = {};
+                const currentLine = lines[i].split(',');
+                
+                for (let j = 0; j < headers.length; j++) {
+                    obj[headers[j].trim()] = currentLine[j] ? currentLine[j].trim() : '';
+                }
+                
+                result.push(obj);
+            }
+            
+            return {
+                headers: headers,
+                data: result
+            };
+        }
+
+        // Render CSV data as a table
+        function renderTable(data) {
+            const tableWrapper = document.getElementById('tableWrapper');
+            
+            if (data.data.length === 0) {
+                tableWrapper.innerHTML = '<p>No data available in this file.</p>';
+                return;
+            }
+            
+            let html = '<table><thead><tr>';
+            
+            // Create header row
+            data.headers.forEach((header, index) => {
+                if (index === 2 || index === 3) {
+                    html += `<th style="text-align:center">${header}</th>`;
+                } else {
+                    html += `<th>${header}</th>`;
+                }
+            });
+            
+            if (isAdmin) {
+                html += '<th width="150">Actions</th>';
+            }
+            
+            html += '</tr></thead><tbody>';
+            
+            // Create data rows
+            data.data.forEach((row, rowIndex) => {
+                html += '<tr>';
+                
+                data.headers.forEach(header => {
+                    html += `<td>${row[header]}</td>`;
+                });
+                
+                if (isAdmin) {
+                    html += `<td>
+                        <button onclick="editRow(${rowIndex})" style="margin-right:5px;">Edit</button>
+                        <button onclick="deleteRow(${rowIndex})" style="background-color:#f44336;">Delete</button>
+                    </td>`;
+                }
+                
+                html += '</tr>';
+            });
+            
+            html += '</tbody></table>';
+            tableWrapper.innerHTML = html;
+        }
+
+        // Toggle admin login panel
+        function toggleAdminLogin() {
+            const modal = document.getElementById('loginModal');
+            modal.style.display = 'block';
+        }
+
+        // Close modal
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+        }
+
+        // Admin login
+        function login() {
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            
+            if (username === 'admin' && password === 'Kejajar@52205') {
+                isAdmin = true;
+                document.getElementById('adminPanel').style.display = 'block';
+                document.querySelector('.admin-logout-btn').style.display = 'block';
+                document.querySelector('.admin-login-btn').style.display = 'none';
+                closeModal('loginModal');
+                
+                // Re-render table with edit buttons if a file is loaded
+                if (currentCSV) {
+                    renderTable(csvData);
+                }
+            } else {
+                alert('Invalid username or password');
+            }
+        }
+
+        // Edit row
+        function editRow(rowIndex) {
+            if (!isAdmin) return;
+            
+            const editForm = document.getElementById('editForm');
+            const rowData = csvData.data[rowIndex];
+            
+            let formHTML = '';
+            csvData.headers.forEach(header => {
+                formHTML += `
+                <div class="form-group">
+                    <label for="${header}">${header}:</label>
+                    <input type="text" id="${header}" value="${rowData[header]}">
+                </div>
+                `;
+            });
+            
+            formHTML += `<input type="hidden" id="rowIndex" value="${rowIndex}">`;
+            editForm.innerHTML = formHTML;
+            
+            const modal = document.getElementById('editModal');
+            modal.style.display = 'block';
+        }
+
+        // Show add new row modal
+        function showAddModal() {
+            if (!isAdmin || !csvData.headers) return;
+            
+            const editForm = document.getElementById('editForm');
+            
+            let formHTML = '';
+            csvData.headers.forEach(header => {
+                formHTML += `
+                <div class="form-group">
+                    <label for="${header}">${header}:</label>
+                    <input type="text" id="${header}" value="">
+                </div>
+                `;
+            });
+            
+            formHTML += `<input type="hidden" id="rowIndex" value="-1">`;
+            editForm.innerHTML = formHTML;
+            
+            document.getElementById('editModal').style.display = 'block';
+        }
+
+        // Save new row
+        function saveNewRow() {
+            const newRow = {};
+            
+            csvData.headers.forEach(header => {
+                newRow[header] = document.getElementById(`new_${header}`).value;
+            });
+            
+            csvData.data.push(newRow);
+            renderTable(csvData);
+            closeModal('addModal');
+            alert('New row added successfully!');
+        }
+
+        // Delete row
+        function deleteRow(rowIndex) {
+            if (!isAdmin) return;
+            
+            if (confirm('Are you sure you want to delete this row?')) {
+                csvData.data.splice(rowIndex, 1);
+                renderTable(csvData);
+                alert('Row deleted successfully!');
+            }
+        }
+
+        // Admin logout
+        function logout() {
+            isAdmin = false;
+            document.getElementById('adminPanel').style.display = 'none';
+            document.querySelector('.admin-logout-btn').style.display = 'none';
+            document.querySelector('.admin-login-btn').style.display = 'block';
+            if (currentCSV) {
+                renderTable(csvData);
+            }
+        }
+
+        // Save edited row
+        function saveEdit() {
+            const rowIndex = parseInt(document.getElementById('rowIndex').value);
+            const updatedRow = {};
+            
+            csvData.headers.forEach(header => {
+                updatedRow[header] = document.getElementById(header).value;
+            });
+            
+            if (rowIndex === -1) {
+                // Add new row
+                csvData.data.push(updatedRow);
+                alert('New row added successfully!');
+            } else {
+                // Edit existing row
+                csvData.data[rowIndex] = updatedRow;
+            }
+            
+            renderTable(csvData);
+            closeModal('editModal');
+        }
+
+        // Upload new CSV (simulated)
+        function uploadNewCSV() {
+            alert('In a real application, this would open a file upload dialog. For this demo, please use the mock files.');
+        }
+
+        // Edit current CSV (simulated)
+        function editCurrentCSV() {
+            if (!currentCSV) {
+                alert('Please load a CSV file first');
+                return;
+            }
+            
+            const editForm = document.getElementById('editForm');
+            editForm.innerHTML = `
+                <div class="form-group">
+                    <label for="csvContent">CSV Content:</label>
+                    <textarea id="csvContent" rows="10" style="width:100%;">${currentCSV}</textarea>
+                </div>
+            `;
+            modal.style.display = 'block';
+        }
+
+        // Save changes to CSV (simulated)
+        function saveChanges() {
+            if (!currentCSV) {
+                alert('No file loaded to save');
+                return;
+            }
+            
+            // In a real application, this would send the data back to the server
+            if (confirm('In a real application, this would save changes to the file. Continue?')) {
+                alert('Changes would be saved here. For this demo, changes are only visible temporarily.');
+                // For the demo, we'll update the currentCSV and re-render
+                if (document.getElementById('csvContent')) {
+                    currentCSV = document.getElementById('csvContent').value;
+                    csvData = parseCSV(currentCSV);
+                    renderTable(csvData);
+                }
+            }
+        }
+    </script>
 </body>
 </html>
