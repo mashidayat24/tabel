@@ -25,26 +25,32 @@
         
         /* Navbar Styling */
         .navbar {
-            display: flex;
-            background-color: var(--primary-blue);
+            display: grid;
+            background-color: white;
             width: 100%;
             overflow: hidden;
-            margin: 0;
-            padding: 0;
+            margin: 10px 0 0 0;
+            padding: 10px;
+            gap: 10px;
+            border: 2px solid var(--primary-blue);
+            grid-template-columns: repeat(2, 1fr); /* 2 columns */
+            grid-template-rows: repeat(2, auto); /* 2 rows */
         }
         
         .navbar a {
-            flex: 1;
-            color: white;
+            color: var(--primary-blue);
             text-align: center;
             text-decoration: none;
             font-weight: bold;
             transition: all 0.3s;
             text-transform: uppercase;
             font-size: 14px;
-            border: 1px solid rgba(255,255,255,0.2);
+            background-color: var(--primary-blue);
+            color: white;
             margin: 0;
-            padding: 0;
+            padding: 10px;
+            border-radius: 6px;
+            border: 2px solid var(--primary-blue);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -52,25 +58,46 @@
         }
         
         .navbar a:hover {
-            background-color: var(--dark-blue);
-            transform: scale(1.01);
-            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            background-color: var(--light-blue);
+            color: var(--primary-blue);
+            transform: scale(1.02);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            border-color: var(--light-blue);
         }
         
         /* Header Styling */
         .header {
             background-color: var(--light-blue);
-            padding: 20px;
+            padding: 2px 20px;
             text-align: center;
-            color: var(--dark-blue);
             border-bottom: 2px solid var(--primary-blue);
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
+            background: linear-gradient(to right, #1fa2ff, #12d8fa, #a6ffcb);
+        }
+
+        .header h1 {
+            color: white;
+            font-weight: 900;
+            font-size: 2.5rem;
+            text-transform: uppercase;
+            text-shadow: 
+                3px 3px 0 #000,
+                -1px -1px 0 #000,  
+                1px -1px 0 #000,
+                -1px 1px 0 #000,
+                1px 1px 0 #000;
+            letter-spacing: 2px;
+            margin: 10px 0;
         }
         
         /* Main Content */
         .container {
             max-width: 1200px;
             margin: 20px auto;
-            padding: 0 20px;
+            padding: 0;
+            border-radius: 6px;
         }
         
         /* Table Styling */
@@ -81,6 +108,8 @@
             background-color: white;
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
             border: 1px solid var(--dark-blue);
+            border-radius: 6px;
+            table-layout: fixed;
         }
         
         th, td {
@@ -109,7 +138,7 @@
         .btn {
             padding: 8px 16px;
             border: none;
-            border-radius: 4px;
+            border-radius: 6px;
             cursor: pointer;
             font-weight: bold;
             transition: all 0.3s;
@@ -133,6 +162,15 @@
             background-color: #c0392b;
         }
         
+        .btn-warning {
+            background-color: #f39c12;
+            color: white;
+        }
+
+        .btn-warning:hover {
+            background-color: #e67e22;
+        }
+
         .btn-success {
             background-color: #2ecc71;
             color: white;
@@ -145,8 +183,8 @@
         /* Admin Controls */
         .admin-controls {
             display: flex;
-            justify-content: flex-end;
-            margin-bottom: 20px;
+            justify-content: center;
+            margin: 3px 0;
             gap: 10px;
         }
         
@@ -167,7 +205,7 @@
             background-color: white;
             margin: 10% auto;
             padding: 20px;
-            border-radius: 5px;
+            border-radius: 8px;
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
             width: 400px;
             max-width: 90%;
@@ -212,7 +250,7 @@
             width: 100%;
             padding: 10px;
             border: 1px solid #ddd;
-            border-radius: 4px;
+            border-radius: 6px;
         }
         
         .form-actions {
@@ -224,12 +262,9 @@
         
         /* Responsive */
         @media (max-width: 768px) {
-            .navbar {
-                flex-direction: column;
-            }
-            
             .navbar a {
-                padding: 10px;
+                flex: 1 0 50%; /* Keep 2 items per row even on mobile */
+                padding: 8px;
             }
             
             table {
@@ -243,6 +278,19 @@
     </style>
 </head>
 <body>
+    <!-- Header -->
+    <div class="header">
+        <h1>PJ BATUR</h1>
+        <div class="admin-controls" id="adminControls">
+        <button class="btn btn-warning" id="loginBtn">Kegiatan dan Monitoring Pekerjaan</button>
+        <div id="adminActions" style="display: none;">
+            <button class="btn btn-success" id="addDataBtn">Tambah Data</button>
+            <button class="btn btn-warning" id="updateBtn">Update CSV</button>
+            <button class="btn btn-danger" id="logoutBtn">Logout</button>
+        </div>
+    </div>
+    </div>
+    
     <!-- Navbar -->
     <div class="navbar">
         <a href="#">Urban</a>
@@ -251,21 +299,8 @@
         <a href="#">Pemadaman</a>
     </div>
     
-    <!-- Header -->
-    <div class="header">
-        <h1>PJ Batur</h1>
-    </div>
-    
     <!-- Main Content -->
     <div class="container">
-        <!-- Admin Controls -->
-        <div class="admin-controls" id="adminControls">
-            <button class="btn btn-primary" id="loginBtn">Login Admin</button>
-            <div id="adminActions" style="display: none;">
-                <button class="btn btn-success" id="addDataBtn">Tambah Data</button>
-                <button class="btn btn-danger" id="logoutBtn">Logout</button>
-            </div>
-        </div>
         
         <!-- Table -->
         <table id="dataTable">
@@ -530,7 +565,18 @@
             console.log('Saving CSV data...');
         }
         
+        // Function to update CSV file
+        function updateCSV() {
+            if (confirm('Update data CSV? Perubahan akan disimpan ke file.')) {
+                saveCSV();
+                alert('Data CSV berhasil diupdate!');
+            }
+        }
+
         // Event Listeners
+        const updateBtn = document.getElementById('updateBtn');
+        updateBtn.addEventListener('click', updateCSV);
+        
         loginBtn.addEventListener('click', openLoginModal);
         
         logoutBtn.addEventListener('click', () => {
