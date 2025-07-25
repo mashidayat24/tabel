@@ -3,7 +3,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const tableContainer = document.getElementById('table-container');
 
     // Load CSV files in the same directory
-    const csvFiles = ['yourfile.csv']; // Ganti dengan nama file CSV Anda
+    const csvFiles = ['urban.csv']; // Ganti dengan nama file CSV Anda
 
     csvFiles.forEach(file => {
         const li = document.createElement('li');
