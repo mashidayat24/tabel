@@ -414,6 +414,8 @@
         // Initialize the table
         function loadTableData() {
             tableBody.innerHTML = '';
+            // Show loading state
+            tableBody.innerHTML = '<tr><td colspan="7" style="text-align:center">Memuat data...</td></tr>';
             
             csvData.forEach((data, index) => {
                 const row = document.createElement('tr');
@@ -509,7 +511,12 @@
         // Add new data
         function addData(data) {
             csvData.push(data);
-            loadTableData();
+            if (csv.length > 0) {
+                    loadTableData();
+                } else {
+                    alert(`Tidak dapat memuat data dari ${filename}`);
+                    tableBody.innerHTML = '<tr><td colspan="7" style="text-align:center">Data tidak tersedia</td></tr>';
+                }
         }
         
         // Edit existing data
@@ -555,6 +562,12 @@
                     e.preventDefault();
                     const filename = `${link.textContent.toLowerCase()}.csv`;
                     loadCSV(filename);
+                    
+                    // Update table header based on selection
+                    document.querySelector('#dataTable thead th:nth-child(2)').textContent = 
+                        link.textContent === 'Urban' ? 'Urban' : 
+                        link.textContent === 'Patroli' ? 'Patroli' :
+                        link.textContent === 'Mandorline' ? 'Mandorline' : 'Pemadaman';
                 });
             });
         }
