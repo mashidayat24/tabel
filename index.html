@@ -324,13 +324,19 @@
         // Fetch available CSV files
         async function fetchCSVFiles() {
             try {
-                // In a real application, you would fetch this from your server
-                // For this demo, we'll simulate it with a mock response
-                const mockFiles = ['data1.csv', 'data2.csv', 'employees.csv'];
-                const fileButtons = document.getElementById('fileButtons');
+                const response = await fetch(window.location.href);
+                const text = await response.text();
+                const parser = new DOMParser();
+                const html = parser.parseFromString(text, 'text/html');
+                const links = Array.from(html.querySelectorAll('a'))
+                    .map(a => a.getAttribute('href'))
+                    .filter(href => href?.endsWith('.csv'))
+                    .map(href => href.split('/').pop());
                 
+                const fileButtons = document.getElementById('fileButtons');
                 fileButtons.innerHTML = '';
-                mockFiles.forEach(file => {
+                
+                links.forEach(file => {
                     const button = document.createElement('button');
                     button.textContent = file.replace('.csv','');
                     button.onclick = () => loadCSV(file);
@@ -338,6 +344,16 @@
                 });
             } catch (error) {
                 console.error('Error fetching CSV files:', error);
+                // Fallback to mock files if API fails
+                const mockFiles = ['urban.csv', 'data1.csv', 'data2.csv', 'employees.csv'];
+                const fileButtons = document.getElementById('fileButtons');
+                fileButtons.innerHTML = '';
+                mockFiles.forEach(file => {
+                    const button = document.createElement('button');
+                    button.textContent = file.replace('.csv','');
+                    button.onclick = () => loadCSV(file);
+                    fileButtons.appendChild(button);
+                });
             }
         }
 
@@ -347,9 +363,17 @@
                 currentFilename = filename;
                 document.getElementById('currentFile').textContent = filename.replace('.csv','');
                 
-                // In a real application, you would fetch the CSV file content from your server
-                // For this demo, we'll simulate it with mock data based on filename
-                let mockData;
+                // Fetch actual CSV file content
+                const response = await fetch(filename);
+                if (!response.ok) {
+                    throw new Error('Failed to load CSV file');
+                }
+                const csvContent = await response.text();
+                currentCSV = csvContent;
+                csvData = parseCSV(csvContent);
+                renderTable(csvData);
+            } catch (error) {
+                console.error('Error loading CSV:', error);
                 
                 if (filename === 'urban.csv') {
                     mockData = `District,Area,Population,Density
