@@ -44,7 +44,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
             if (username === 'admin' && password === 'Kejajar@52205') {
                 document.getElementById('admin-container').style.display = 'block';
-                loadCSV('yourfile.csv'); // Load CSV for editing
+                loadCSV('urban.csv'); // Load CSV for editing
             } else {
                 alert('Username atau password salah!');
             }
