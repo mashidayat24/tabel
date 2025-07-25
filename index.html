@@ -1,0 +1,577 @@
+<?php
+header('Content-Type: application/json');
+$files = glob('*.csv');
+echo json_encode(['files' => $files]);
+?>
+```Here is the updated HTML content after applying above edits:
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PJ Batur</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        .data-table th, .data-table td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+            position: relative;
+        }
+        .data-table th {
+            background-color: #4a90e2;
+            color: white;
+            font-weight: 600;
+        }
+        .data-table tr:nth-child(even) {
+            background-color: #f8fafc;
+        }
+        .data-table tr:hover {
+            background-color: #f1f5f9;
+        }
+        .data-table td:not(:last-child), 
+        .data-table th:not(:last-child) {
+            border-right: 2px solid #e2e8f0;
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.4);
+        }
+        .modal-content {
+            background-color: #fefefe;
+            margin: 10% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            max-width: 800px;
+            border-radius: 8px;
+        }
+        #pjTitle {
+            position: relative;
+        }
+        .file-nav {
+            padding: 8px 0;
+        }
+        .file-btn {
+            transition: all 0.2s ease;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 min-h-screen w-full">
+    <header class="bg-blue-600 text-white shadow-lg">
+        <div class="container mx-auto px-4 py-4">
+            <div class="flex justify-between items-center mb-4">
+                <h1 class="text-2xl font-bold">PJ <span id="baturText" class="cursor-pointer text-blue-200 hover:text-white">Batur</span></h1>
+                <button id="logoutBtn" class="hidden bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
+                    Logout Admin
+                </button>
+            </div>
+            <nav class="file-nav flex space-x-4">
+                <button class="file-btn py-1 px-2 hover:bg-blue-700 rounded" data-file="">All Files</button>
+                <!-- Real CSV files will be auto-populated here -->
+            </nav>
+        </div>
+    </header>
+
+    <main class="w-full px-4 py-8">
+        <div id="userView" class="bg-white rounded-lg shadow-md p-6">
+            <h2 class="text-xl font-semibold mb-4">CSV Data Viewer</h2>
+            <div class="mb-4">
+                <label for="fileSelect" class="block text-sm font-medium text-gray-700 mb-1">Select CSV File:</label>
+                <select id="fileSelect" class="w-full p-2 border border-gray-300 rounded-md">
+                    <option value="">-- Select File --</option>
+                    <option value="data1.csv">Sample Data 1</option>
+                    <option value="data2.csv">Sample Data 2</option>
+                </select>
+            </div>
+            <div id="csvDataContainer" class="overflow-x-auto">
+                <p class="text-gray-500">Select a CSV file to view data...</p>
+            </div>
+        </div>
+
+        <div id="adminView" class="hidden bg-white rounded-lg shadow-md p-6">
+            <h2 class="text-xl font-semibold mb-4">CSV Data Editor (Admin Mode)</h2>
+            <div class="mb-4">
+                <label for="adminFileSelect" class="block text-sm font-medium text-gray-700 mb-1">Select CSV File:</label>
+                <select id="adminFileSelect" class="w-full p-2 border border-gray-300 rounded-md">
+                    <option value="">-- Select File --</option>
+                    <option value="data1.csv">Sample Data 1</option>
+                    <option value="data2.csv">Sample Data 2</option>
+                </select>
+            </div>
+            <div id="adminCsvDataContainer" class="mb-4 overflow-x-auto">
+                <p class="text-gray-500">Select a CSV file to edit data...</p>
+            </div>
+            <div class="flex space-x-2">
+                <button id="addRowBtn" class="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
+                    Add Row
+                </button>
+                <button id="saveChangesBtn" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                    Save Changes
+                </button>
+            </div>
+        </div>
+    </main>
+
+    <!-- Login Modal -->
+    <div id="loginModal" class="modal">
+        <div class="modal-content">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-xl font-semibold">Admin Login</h3>
+                <span class="close-modal cursor-pointer text-xl">&times;</span>
+            </div>
+            <div id="loginForm" class="space-y-4">
+                <div>
+                    <label for="username" class="block text-sm font-medium text-gray-700 mb-1">Username:</label>
+                    <input type="text" id="username" class="w-full p-2 border border-gray-300 rounded-md" placeholder="Enter username">
+                </div>
+                <div>
+                    <label for="password" class="block text-sm font-medium text-gray-700 mb-1">Password:</label>
+                    <input type="password" id="password" class="w-full p-2 border border-gray-300 rounded-md" placeholder="Enter password">
+                </div>
+                <button id="submitLogin" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                    Login
+                </button>
+                <div id="loginError" class="hidden text-red-600 text-sm"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Row Modal -->
+    <div id="addRowModal" class="modal">
+        <div class="modal-content">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-xl font-semibold">Add New Row</h3>
+                <span class="close-modal cursor-pointer text-xl">&times;</span>
+            </div>
+            <div id="addRowForm">
+                <div id="addRowFields" class="space-y-4">
+                    <!-- Fields will be added dynamically here -->
+                </div>
+                <button id="submitAddRow" class="mt-4 w-full bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
+                    Add Row
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Auto-detect CSV files in directory
+        function detectCsvFiles() {
+            return new Promise((resolve) => {
+                fetch('get_csv_files.php')  // This would call a server-side script
+                    .then(response => response.json())
+                    .then(data => resolve(data.files))
+                    .catch(() => {
+                        // Fallback if server script fails
+                        const mockFiles = [
+                            'data1.csv',
+                            'data2.csv',
+                            'transaction_data.csv'
+                        ];
+                        resolve(mockFiles);
+                    });
+            });
+        }
+
+        // Initialize file selector dropdown
+        async function initFileSelect() {
+            const files = await detectCsvFiles();
+            const selectors = [fileSelect, adminFileSelect];
+            
+            selectors.forEach(selector => {
+                // Clear existing options except first
+                while (selector.options.length > 1) {
+                    selector.remove(1);
+                }
+                
+                // Add detected files
+                files.forEach(file => {
+                    const option = document.createElement('option');
+                    option.value = file;
+                    option.textContent = file;
+                    selector.appendChild(option);
+                });
+            });
+        }
+
+        // Sample CSV data - will be replaced with actual file loading
+        const csvFiles = {
+            'data1.csv': [
+                ['ID', 'Name', 'Email', 'Phone'],
+                ['1', 'John Doe', 'john@example.com', '123-456-7890'],
+                ['2', 'Jane Smith', 'jane@example.com', '234-567-8901'],
+                ['3', 'Bob Johnson', 'bob@example.com', '345-678-9012']
+            ],
+            'data2.csv': [
+                ['ProductID', 'ProductName', 'Price', 'Stock'],
+                ['101', 'Laptop', '999.99', '50'],
+                ['102', 'Phone', '699.99', '120'],
+                ['103', 'Tablet', '499.99', '30']
+            ]
+        };
+
+        let currentFile = '';
+        let isAdmin = false;
+        let editedData = [];
+        let headers = [];
+
+        // DOM Elements
+        const loginBtn = document.getElementById('loginBtn');
+        const logoutBtn = document.getElementById('logoutBtn');
+        const userView = document.getElementById('userView');
+        const adminView = document.getElementById('adminView');
+        const fileSelect = document.getElementById('fileSelect');
+        const adminFileSelect = document.getElementById('adminFileSelect');
+        const csvDataContainer = document.getElementById('csvDataContainer');
+        const adminCsvDataContainer = document.getElementById('adminCsvDataContainer');
+        const loginModal = document.getElementById('loginModal');
+        const addRowModal = document.getElementById('addRowModal');
+        const closeModalBtns = document.querySelectorAll('.close-modal');
+        const submitLogin = document.getElementById('submitLogin');
+        const usernameInput = document.getElementById('username');
+        const passwordInput = document.getElementById('password');
+        const loginError = document.getElementById('loginError');
+        const addRowBtn = document.getElementById('addRowBtn');
+        const saveChangesBtn = document.getElementById('saveChangesBtn');
+        const addRowFields = document.getElementById('addRowFields');
+        const submitAddRow = document.getElementById('submitAddRow');
+
+        // Event Listeners
+        loginBtn.addEventListener('click', showLoginModal);
+        logoutBtn.addEventListener('click', logoutAdmin);
+        fileSelect.addEventListener('change', (e) => loadCsvData(e.target.value));
+        adminFileSelect.addEventListener('change', (e) => loadCsvDataForEdit(e.target.value));
+        closeModalBtns.forEach(btn => btn.addEventListener('click', closeModal));
+        submitLogin.addEventListener('click', loginAdmin);
+        addRowBtn.addEventListener('click', showAddRowModal);
+        saveChangesBtn.addEventListener('click', saveCsvChanges);
+        submitAddRow.addEventListener('click', addNewRow);
+
+        function renderDataTable(data, editable = false) {
+            let tableHTML = '<table class="data-table"><thead><tr>';
+            
+            // Create header row
+            const headers = data[0];
+            headers.forEach(header => {
+                tableHTML += `<th>${header}</th>`;
+            });
+            
+            if (editable) {
+                tableHTML += '<th>Actions</th>';
+            }
+            
+            tableHTML += '</tr></thead><tbody>';
+            
+            // Create data rows
+            for (let i = 1; i < data.length; i++) {
+                tableHTML += '<tr>';
+                data[i].forEach(cell => {
+                    tableHTML += `<td>${cell}</td>`;
+                });
+                
+                if (editable) {
+                    tableHTML += `<td>
+                        <button class="edit-row p-1 bg-blue-100 text-blue-600 rounded hover:bg-blue-200" data-row="${i}">Edit</button>
+                        <button class="delete-row p-1 bg-red-100 text-red-600 rounded hover:bg-red-200 ml-1" data-row="${i}">Delete</button>
+                    </td>`;
+                }
+                
+                tableHTML += '</tr>';
+            }
+            
+            tableHTML += '</tbody></table>';
+            
+            return tableHTML;
+        }
+
+        function loadCsvData(fileName) {
+            if (!fileName) {
+                csvDataContainer.innerHTML = '<p class="text-gray-500">Select a CSV file to view data...</p>';
+                return;
+            }
+            
+            currentFile = fileName;
+            const data = csvFiles[fileName];
+            
+            if (!data) {
+                csvDataContainer.innerHTML = '<p class="text-red-500">File not found!</p>';
+                return;
+            }
+            
+            csvDataContainer.innerHTML = renderDataTable(data);
+        }
+
+        function loadCsvDataForEdit(fileName) {
+            if (!fileName) {
+                adminCsvDataContainer.innerHTML = '<p class="text-gray-500">Select a CSV file to edit data...</p>';
+                return;
+            }
+            
+            currentFile = fileName;
+            const data = csvFiles[fileName];
+            
+            if (!data) {
+                adminCsvDataContainer.innerHTML = '<p class="text-red-500">File not found!</p>';
+                return;
+            }
+            
+            editedData = [...data];
+            headers = [...data[0]];
+            
+            adminCsvDataContainer.innerHTML = renderDataTable(editedData, true);
+            
+            // Add event listeners for edit and delete buttons
+            adminCsvDataContainer.querySelectorAll('.edit-row').forEach(btn => {
+                btn.addEventListener('click', (e) => editRow(parseInt(e.target.dataset.row)));
+            });
+            
+            adminCsvDataContainer.querySelectorAll('.delete-row').forEach(btn => {
+                btn.addEventListener('click', (e) => deleteRow(parseInt(e.target.dataset.row)));
+            });
+        }
+
+        function showLoginModal() {
+            loginModal.style.display = 'block';
+        }
+
+        function showAddRowModal() {
+            if (!currentFile) {
+                alert('Please select a file first!');
+                return;
+            }
+            
+            addRowFields.innerHTML = '';
+            
+            headers.forEach((header, index) => {
+                const fieldDiv = document.createElement('div');
+                fieldDiv.innerHTML = `
+                    <label for="field${index}" class="block text-sm font-medium text-gray-700 mb-1">${header}:</label>
+                    <input type="text" id="field${index}" class="w-full p-2 border border-gray-300 rounded-md" placeholder="Enter ${header.toLowerCase()}">
+                `;
+                addRowFields.appendChild(fieldDiv);
+            });
+            
+            addRowModal.style.display = 'block';
+        }
+
+        function closeModal() {
+            loginModal.style.display = 'none';
+            addRowModal.style.display = 'none';
+            loginError.classList.add('hidden');
+            usernameInput.value = '';
+            passwordInput.value = '';
+        }
+
+        function loginAdmin() {
+            const username = usernameInput.value.trim();
+            const password = passwordInput.value.trim();
+            
+            if (username === 'admin' && password === 'Kejajar@52205') {
+                isAdmin = true;
+                toggleAdminView(true);
+                closeModal();
+            } else {
+                loginError.textContent = 'Invalid username or password!';
+                loginError.classList.remove('hidden');
+            }
+        }
+
+        function logoutAdmin() {
+            isAdmin = false;
+            toggleAdminView(false);
+        }
+
+        function toggleAdminView(showAdmin) {
+            userView.classList.toggle('hidden', showAdmin);
+            adminView.classList.toggle('hidden', !showAdmin);
+            loginBtn.classList.toggle('hidden', showAdmin);
+            logoutBtn.classList.toggle('hidden', !showAdmin);
+            
+            if (!showAdmin) {
+                currentFile = '';
+                csvDataContainer.innerHTML = '<p class="text-gray-500">Select a CSV file to view data...</p>';
+                adminCsvDataContainer.innerHTML = '<p class="text-gray-500">Select a CSV file to edit data...</p>';
+                fileSelect.value = '';
+                adminFileSelect.value = '';
+            }
+        }
+
+        function editRow(rowIndex) {
+            const row = editedData[rowIndex];
+            
+            // Replace the row with input fields
+            let editHTML = '<tr>';
+            row.forEach((cell, cellIndex) => {
+                editHTML += `<td><input type="text" value="${cell}" class="w-full p-1 border"></td>`;
+            });
+            
+            editHTML += `<td>
+                <button class="save-edit p-1 bg-green-100 text-green-600 rounded hover:bg-green-200" data-row="${rowIndex}">Save</button>
+                <button class="cancel-edit p-1 bg-gray-100 text-gray-600 rounded hover:bg-gray-200 ml-1" data-row="">Cancel</button>
+            </td></tr>`;
+            
+            const rows = adminCsvDataContainer.querySelector('table').rows;
+            rows[rowIndex].outerHTML = editHTML;
+            
+            // Add event listeners for save and cancel
+            adminCsvDataContainer.querySelector('.save-edit').addEventListener('click', (e) => saveRowEdit(rowIndex, e));
+            adminCsvDataContainer.querySelector('.cancel-edit').addEventListener('click', cancelRowEdit);
+        }
+
+        function saveRowEdit(rowIndex, e) {
+            const inputs = adminCsvDataContainer.querySelectorAll(`table tr:nth-child(${rowIndex + 1}) input`);
+            const newData = [];
+            
+            inputs.forEach(input => {
+                newData.push(input.value);
+            });
+            
+            editedData[rowIndex] = newData;
+            
+            // Re-render the table
+            adminCsvDataContainer.innerHTML = renderDataTable(editedData, true);
+            
+            // Re-add event listeners
+            adminCsvDataContainer.querySelectorAll('.edit-row').forEach(btn => {
+                btn.addEventListener('click', (e) => editRow(parseInt(e.target.dataset.row)));
+            });
+            
+            adminCsvDataContainer.querySelectorAll('.delete-row').forEach(btn => {
+                btn.addEventListener('click', (e) => deleteRow(parseInt(e.target.dataset.row)));
+            });
+        }
+
+        function cancelRowEdit() {
+            // Just re-render the table
+            adminCsvDataContainer.innerHTML = renderDataTable(editedData, true);
+            
+            // Re-add event listeners
+            adminCsvDataContainer.querySelectorAll('.edit-row').forEach(btn => {
+                btn.addEventListener('click', (e) => editRow(parseInt(e.target.dataset.row)));
+            });
+            
+            adminCsvDataContainer.querySelectorAll('.delete-row').forEach(btn => {
+                btn.addEventListener('click', (e) => deleteRow(parseInt(e.target.dataset.row)));
+            });
+        }
+
+        function deleteRow(rowIndex) {
+            if (confirm('Are you sure you want to delete this row?')) {
+                editedData.splice(rowIndex, 1);
+                adminCsvDataContainer.innerHTML = renderDataTable(editedData, true);
+                
+                // Re-add event listeners
+                adminCsvDataContainer.querySelectorAll('.edit-row').forEach(btn => {
+                    btn.addEventListener('click', (e) => editRow(parseInt(e.target.dataset.row)));
+                });
+                
+                adminCsvDataContainer.querySelectorAll('.delete-row').forEach(btn => {
+                    btn.addEventListener('click', (e) => deleteRow(parseInt(e.target.dataset.row)));
+                });
+            }
+        }
+
+        function addNewRow() {
+            const inputs = addRowFields.querySelectorAll('input');
+            const newRow = [];
+            
+            inputs.forEach(input => {
+                newRow.push(input.value);
+            });
+            
+            if (newRow.some(value => value.trim() === '')) {
+                alert('Please fill all fields!');
+                return;
+            }
+            
+            editedData.push(newRow);
+            adminCsvDataContainer.innerHTML = renderDataTable(editedData, true);
+            
+            // Re-add event listeners
+            adminCsvDataContainer.querySelectorAll('.edit-row').forEach(btn => {
+                btn.addEventListener('click', (e) => editRow(parseInt(e.target.dataset.row)));
+            });
+            
+            adminCsvDataContainer.querySelectorAll('.delete-row').forEach(btn => {
+                btn.addEventListener('click', (e) => deleteRow(parseInt(e.target.dataset.row)));
+            });
+            
+            addRowModal.style.display = 'none';
+            
+            // Clear inputs
+            inputs.forEach(input => {
+                input.value = '';
+            });
+        }
+
+        function saveCsvChanges() {
+            if (!currentFile) {
+                alert('Please select a file first!');
+                return;
+            }
+            
+            csvFiles[currentFile] = editedData;
+            alert('Changes saved successfully!');
+            
+            // Update the user view if they're showing the same file
+            if (fileSelect.value === currentFile) {
+                loadCsvData(currentFile);
+            }
+        }
+
+        // Initialize
+        toggleAdminView(false);
+        initFileSelect();
+
+        // Hidden admin login via Batur text click
+        const baturText = document.getElementById('baturText');
+        baturText.addEventListener('click', (e) => {
+            const loginBtn = document.createElement('button');
+            loginBtn.id = 'loginBtn';
+            loginBtn.className = 'hidden ml-4 bg-blue-700 hover:bg-blue-800 text-white font-bold py-2 px-4 rounded';
+            loginBtn.textContent = 'Admin Login';
+            loginBtn.onclick = showLoginModal;
+            
+            const existingBtn = document.getElementById('loginBtn');
+            if (!existingBtn) {
+                baturText.insertAdjacentElement('afterend', loginBtn);
+                setTimeout(() => loginBtn.classList.remove('hidden'), 0);
+            } else {
+                existingBtn.remove();
+            }
+        });
+
+        // Add file nav buttons
+        async function initFileNav() {
+            const files = await detectCsvFiles();
+            const nav = document.querySelector('.file-nav');
+            
+            files.forEach(file => {
+                const btn = document.createElement('button');
+                btn.className = 'file-btn py-1 px-2 hover:bg-blue-700 rounded';
+                btn.textContent = file;
+                btn.dataset.file = file;
+                btn.onclick = () => loadCsvData(file);
+                nav.appendChild(btn);
+            });
+        }
+
+        initFileNav();
+    </script>
+</body>
+</html>
