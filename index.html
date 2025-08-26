@@ -4,392 +4,125 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PJ BATUR</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        html, body {
-            height: 100%;
-            width: 100%;
-        }
-
-        body {
-            font-family: Arial, sans-serif;
-            background: linear-gradient(135deg, #87CEEB 0%, #f0f8ff 50%, #e6f3ff 100%);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: flex-start;
-            min-height: 100vh;
-        }
-
-        .container {
-            width: 100%;
-            max-width: 100%;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-
-        .header {
-            background: linear-gradient(135deg, #003366 0%, #004080 50%, #002244 100%);
-            color: white;
-            padding: 1.5rem;
-            text-align: center;
-            position: relative;
-            width: 100%;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-        }
-
-        .header h1 {
-            font-size: 2.5rem;
-            font-weight: bold;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
-            color: #ffd700;
-        }
-
-        .menu-btn {
-            position: absolute;
-            right: 30px;
-            top: 50%;
-            transform: translateY(-50%);
-            cursor: pointer;
-            color: #ffd700;
-            font-size: 28px;
-            transition: all 0.3s ease;
-            padding: 10px;
-            border-radius: 5px;
-        }
-
-        .menu-btn:hover {
-            background-color: rgba(255, 215, 0, 0.2);
-            transform: translateY(-50%) scale(1.1);
-        }
-
-        .sidebar {
-            height: 100%;
-            width: 0;
-            position: fixed;
-            top: 0;
-            right: 0;
-            background: linear-gradient(180deg, #002244 0%, #001133 100%);
-            overflow-x: hidden;
-            transition: 0.5s ease;
-            padding-top: 60px;
-            z-index: 1000;
-            box-shadow: -5px 0 15px rgba(0, 0, 0, 0.3);
-        }
-
-        .sidebar a {
-            padding: 15px 15px 15px 35px;
-            text-decoration: none;
-            font-size: 18px;
-            color: white;
-            display: block;
-            transition: all 0.3s ease;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .sidebar a:hover {
-            background: linear-gradient(90deg, #001133 0%, #003366 100%);
-            color: #ffd700;
-            padding-left: 45px;
-            border-left: 4px solid #ffd700;
-        }
-
-        .sidebar .closebtn {
-            position: absolute;
-            top: 10px;
-            right: 25px;
-            font-size: 36px;
-            margin-left: 50px;
-            color: #ffd700;
-        }
-
-        .sidebar .closebtn:hover {
-            color: white;
-            background: none;
-            padding-left: 25px;
-            border: none;
-        }
-
-        .content {
-            width: 100%;
-            max-width: 100%;
-            text-align: center;
-            padding: 0;
-            transition: margin-right .5s ease;
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
-            z-index: 999;
-            display: none;
-            backdrop-filter: blur(2px);
-        }
-
-        .page-content {
-            display: none;
-            padding: 40px 20px;
-            background: linear-gradient(135deg, white 0%, #f8f9fa 100%);
-            margin: 20px;
-            border-radius: 15px;
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
-            width: calc(100% - 40px);
-            max-width: 100%;
-            min-height: 70vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .page-content.active {
-            display: flex;
-        }
-
-        .page-content h2 {
-            color: #003366;
-            margin-bottom: 30px;
-            font-size: 2.2rem;
-            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
-            border-bottom: 3px solid #ffd700;
-            padding-bottom: 10px;
-        }
-
-        .page-content p {
-            font-size: 1.1rem;
-            line-height: 1.6;
-            color: #333;
-            max-width: 800px;
-            text-align: center;
-        }
-
-        .main-image {
-            max-width: 90%;
-            height: auto;
-            margin: 30px 0;
-            border-radius: 15px;
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
-            transition: transform 0.3s ease;
-        }
-
-        .main-image:hover {
-            transform: scale(1.02);
-        }
-
-        /* Responsive Design */
-        @media screen and (max-width: 768px) {
-            .header h1 {
-                font-size: 2rem;
-            }
-            
-            .menu-btn {
-                right: 20px;
-                font-size: 24px;
-            }
-            
-            .page-content {
-                margin: 10px;
-                padding: 20px 15px;
-                width: calc(100% - 20px);
-            }
-            
-            .page-content h2 {
-                font-size: 1.8rem;
-            }
-            
-            .main-image {
-                max-width: 95%;
-            }
-        }
-
-        @media screen and (max-height: 450px) {
-            .sidebar {padding-top: 15px;}
-            .sidebar a {font-size: 16px; padding: 10px 10px 10px 25px;}
-        }
-
-        /* Loading Animation */
-        .page-content {
-            animation: fadeIn 0.5s ease-in;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-    </style>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-            <h1>PJ BATUR</h1>
-            <div class="menu-btn" onclick="openNav()">☰</div>
+    <div class="hamburger-menu" onclick="toggleMenu()">
+        <div class="menu-icon"></div>
+        <div class="menu-icon"></div>
+        <div class="menu-icon"></div>
+    </div>
+
+    <div class="overlay" id="overlay" onclick="closeMenu()"></div>
+
+    <div id="mySidebar" class="sidebar">
+        <a href="#" onclick="showPage('patroli')">Patroli ROW</a>
+        <a href="#" onclick="showPage('urban')">Urban</a>
+        <a href="#" onclick="showPage('mandorline')">Mandorline</a>
+        <a href="#" onclick="showPage('pemadaman')">Pemadaman</a>
+        <a href="#" onclick="showPage('kct')">KCT</a>
+        <a href="#" onclick="showPage('vkrn')">VKRN</a>
+        <a href="#" onclick="showPage('ct-gambar')">CT Dengan Gambar</a>
+        <a href="#" onclick="showPage('ct-manual')">CT Manual</a>
+        <a href="#" onclick="showPage('k3')">K3</a>
+    </div>
+
+    <div class="content">
+        <div id="patroli" class="page active">
+            <div class="header">
+                <h1>Patroli ROW</h1>
+            </div>
+            <div class="content-body">
+                <img src="batur.jpg" alt="Batur">
+            </div>
         </div>
 
-        <!-- Overlay untuk auto close -->
-        <div class="overlay" id="overlay" onclick="closeNav()"></div>
-
-        <div id="mySidebar" class="sidebar">
-            <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">×</a>
-            <a href="#" onclick="showPage('patroli')">Patroli ROW</a>
-            <a href="#" onclick="showPage('urban')">Urban</a>
-            <a href="#" onclick="showPage('mandorline')">Mandorline</a>
-            <a href="#" onclick="showPage('pemadaman')">Pemadaman</a>
-            <a href="#" onclick="showPage('kct')">KCT</a>
-            <a href="#" onclick="showPage('vkrn')">VKRN</a>
-            <a href="#" onclick="showPage('ct-gambar')">CT Dengan Gambar</a>
-            <a href="#" onclick="showPage('ct-manual')">CT Manual</a>
-            <a href="#" onclick="showPage('k3')">K3</a>
+        <div id="urban" class="page">
+            <div class="header">
+                <h1>Urban</h1>
+            </div>
+            <div class="content-body">
+                <div class="table-container">
+                    <table id="urbanTable" class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Loading...</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Memuat data dari urban.csv...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
 
-        <div class="content" id="main">
-            <!-- Halaman Patroli ROW (Default) -->
-            <div id="patroli" class="page-content active">
-                <h2>Patroli ROW</h2>
-                <img src="batur.jpg" alt="Batur" class="main-image">
-                <p>Selamat datang di halaman Patroli ROW PJ BATUR. Sistem monitoring dan patroli Right of Way untuk memastikan keamanan dan kelancaran operasional.</p>
+        <div id="mandorline" class="page">
+            <div class="header">
+                <h1>Mandorline</h1>
             </div>
-
-            <!-- Halaman Urban -->
-            <div id="urban" class="page-content">
-                <h2>Urban</h2>
-                <p>Halaman Urban - Pengelolaan sistem kelistrikan di area perkotaan dengan teknologi terdepan dan pelayanan terbaik.</p>
+            <div class="content-body">
+                <p>Konten halaman Mandorline akan ditampilkan di sini.</p>
             </div>
+        </div>
 
-            <!-- Halaman Mandorline -->
-            <div id="mandorline" class="page-content">
-                <h2>Mandorline</h2>
-                <p>Halaman Mandorline - Sistem pengawasan dan koordinasi mandor lapangan untuk operasional yang efektif.</p>
+        <div id="pemadaman" class="page">
+            <div class="header">
+                <h1>Pemadaman</h1>
             </div>
-
-            <!-- Halaman Pemadaman -->
-            <div id="pemadaman" class="page-content">
-                <h2>Pemadaman</h2>
-                <p>Halaman Pemadaman - Informasi dan koordinasi pemadaman listrik terencana maupun gangguan darurat.</p>
+            <div class="content-body">
+                <p>Konten halaman Pemadaman akan ditampilkan di sini.</p>
             </div>
+        </div>
 
-            <!-- Halaman KCT -->
-            <div id="kct" class="page-content">
-                <h2>KCT</h2>
-                <p>Halaman KCT - Sistem Kontrol dan Monitoring untuk pengoperasian peralatan listrik secara terpusat.</p>
+        <div id="kct" class="page">
+            <div class="header">
+                <h1>KCT</h1>
             </div>
-
-            <!-- Halaman VKRN -->
-            <div id="vkrn" class="page-content">
-                <h2>VKRN</h2>
-                <p>Halaman VKRN - Sistem monitoring dan kontrol jaringan distribusi listrik secara real-time.</p>
+            <div class="content-body">
+                <p>Konten halaman KCT akan ditampilkan di sini.</p>
             </div>
+        </div>
 
-            <!-- Halaman CT Dengan Gambar -->
-            <div id="ct-gambar" class="page-content">
-                <h2>CT Dengan Gambar</h2>
-                <p>Halaman CT Dengan Gambar - Dokumentasi visual Current Transformer untuk analisis dan monitoring.</p>
+        <div id="vkrn" class="page">
+            <div class="header">
+                <h1>VKRN</h1>
             </div>
-
-            <!-- Halaman CT Manual -->
-            <div id="ct-manual" class="page-content">
-                <h2>CT Manual</h2>
-                <p>Halaman CT Manual - Panduan dan prosedur manual untuk pengoperasian Current Transformer.</p>
+            <div class="content-body">
+                <p>Konten halaman VKRN akan ditampilkan di sini.</p>
             </div>
+        </div>
 
-            <!-- Halaman K3 -->
-            <div id="k3" class="page-content">
-                <h2>K3</h2>
-                <p>Halaman K3 - Keselamatan dan Kesehatan Kerja untuk memastikan lingkungan kerja yang aman dan sehat.</p>
+        <div id="ct-gambar" class="page">
+            <div class="header">
+                <h1>CT Dengan Gambar</h1>
+            </div>
+            <div class="content-body">
+                <p>Konten halaman CT Dengan Gambar akan ditampilkan di sini.</p>
+            </div>
+        </div>
+
+        <div id="ct-manual" class="page">
+            <div class="header">
+                <h1>CT Manual</h1>
+            </div>
+            <div class="content-body">
+                <p>Konten halaman CT Manual akan ditampilkan di sini.</p>
+            </div>
+        </div>
+
+        <div id="k3" class="page">
+            <div class="header">
+                <h1>K3</h1>
+            </div>
+            <div class="content-body">
+                <p>Konten halaman K3 akan ditampilkan di sini.</p>
             </div>
         </div>
     </div>
 
-    <script>
-        let menuTimeout;
-
-        function openNav() {
-            document.getElementById("mySidebar").style.width = "280px";
-            document.getElementById("main").style.marginRight = "280px";
-            document.getElementById("overlay").style.display = "block";
-            
-            // Auto hide setelah 5 detik
-            clearTimeout(menuTimeout);
-            menuTimeout = setTimeout(function() {
-                closeNav();
-            }, 5000);
-        }
-
-        function closeNav() {
-            document.getElementById("mySidebar").style.width = "0";
-            document.getElementById("main").style.marginRight = "0";
-            document.getElementById("overlay").style.display = "none";
-            clearTimeout(menuTimeout);
-        }
-
-        function showPage(pageId) {
-            // Sembunyikan semua halaman
-            const pages = document.querySelectorAll('.page-content');
-            pages.forEach(page => {
-                page.classList.remove('active');
-            });
-            
-            // Tampilkan halaman yang dipilih
-            document.getElementById(pageId).classList.add('active');
-            
-            // Tutup menu setelah memilih
-            closeNav();
-        }
-
-        // Auto hide ketika mouse tidak bergerak di area sidebar
-        document.getElementById("mySidebar").addEventListener('mouseleave', function() {
-            menuTimeout = setTimeout(function() {
-                closeNav();
-            }, 2000);
-        });
-
-        // Cancel auto hide ketika mouse masuk ke sidebar
-        document.getElementById("mySidebar").addEventListener('mouseenter', function() {
-            clearTimeout(menuTimeout);
-        });
-
-        // Tutup menu ketika scroll
-        window.addEventListener('scroll', function() {
-            if (document.getElementById("mySidebar").style.width === "280px") {
-                closeNav();
-            }
-        });
-
-        // Tutup menu dengan tombol ESC
-        document.addEventListener('keydown', function(event) {
-            if (event.key === 'Escape') {
-                closeNav();
-            }
-        });
-
-        // Smooth scrolling untuk transisi halaman
-        document.addEventListener('DOMContentLoaded', function() {
-            const links = document.querySelectorAll('.sidebar a[onclick]');
-            links.forEach(link => {
-                link.addEventListener('click', function() {
-                    setTimeout(() => {
-                        window.scrollTo({
-                            top: 0,
-                            behavior: 'smooth'
-                        });
-                    }, 100);
-                });
-            });
-        });
-    </script>
+    <script src="script.js"></script>
 </body>
 </html>
