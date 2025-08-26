@@ -375,18 +375,26 @@ function resetForm() {
 
 // CT Manual Functions
 function updatePreview() {
-    const meterNumber = document.getElementById('manual-meter-number').value.trim();
-    const gNumber = document.getElementById('manual-g-number').value.trim();
+    const meterNumberInput = document.getElementById('manual-meter-number');
+    const gNumberInput = document.getElementById('manual-g-number');
+    const previewText = document.getElementById('manual-preview-text');
+    const sendButton = document.querySelector('.whatsapp-btn-manual');
+    
+    if (!meterNumberInput || !gNumberInput || !previewText) {
+        return; // Elements not found, probably not on CT Manual page
+    }
+    
+    const meterNumber = meterNumberInput.value.trim();
+    const gNumber = gNumberInput.value.trim();
     
     const message = `*FORMAT PERMINTAAN CLEAR TEMPER*
 ID Pelanggan/Nomor Meter : ${meterNumber}
 Nomor gangguan/PK : ${gNumber}
 Keterangan: kwh meter periksa.`;
     
-    document.getElementById('manual-preview-text').textContent = message;
+    previewText.textContent = message;
     
     // Enable/disable button based on input
-    const sendButton = document.querySelector('.whatsapp-btn-manual');
     if (sendButton) {
         if (meterNumber && gNumber) {
             sendButton.disabled = false;
@@ -400,12 +408,4 @@ Keterangan: kwh meter periksa.`;
 
 function sendManualToWhatsApp() {
     const meterNumber = document.getElementById('manual-meter-number').value.trim();
-    const gNumber = document.getElementById('manual-g-number').value.trim();
-    
-    if (!meterNumber || !gNumber) {
-        alert('Mohon isi nomor meter dan nomor G terlebih dahulu!');
-        return;
-    }
-    
-    const message = `*FORMAT PERMINTAAN CLEAR TEMPER*
-ID Pel
+    const gNumber = document.getElementById('manual-
