@@ -49,8 +49,74 @@
         <div class="page" id="urban">
             <h2>Urban</h2>
             <div class="page-content">
-                <p>Halaman Urban - Pengelolaan sistem kelistrikan di area perkotaan.</p>
-                <p>Sistem urban mencakup pengelolaan infrastruktur listrik di daerah padat penduduk dengan kompleksitas tinggi.</p>
+                <p style="margin-bottom: 20px; text-align: center; font-size: 16px; color: #666;">
+                    Halaman Urban - Pengelolaan sistem kelistrikan di area perkotaan dengan monitoring real-time kapasitas dan status operasional.
+                </p>
+                
+                <div class="table-info">
+                    <div class="info-card">
+                        <h4>Total Area</h4>
+                        <span id="totalAreas">-</span>
+                    </div>
+                    <div class="info-card">
+                        <h4>Area Aktif</h4>
+                        <span id="activeAreas">-</span>
+                    </div>
+                    <div class="info-card">
+                        <h4>Total Kapasitas</h4>
+                        <span id="totalCapacity">- MW</span>
+                    </div>
+                    <div class="info-card">
+                        <h4>Maintenance</h4>
+                        <span id="maintenanceAreas">-</span>
+                    </div>
+                </div>
+
+                <div class="table-container">
+                    <div class="table-header">
+                        <h3>Data Sistem Kelistrikan Urban</h3>
+                        <div class="table-actions">
+                            <button class="refresh-btn" onclick="refreshUrbanData()">
+                                <span>🔄</span> Refresh Data
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <table id="urbanTable" class="data-table">
+                        <thead>
+                            <tr>
+                                <th style="width: 60px;">No</th>
+                                <th style="width: 200px;">Nama Area</th>
+                                <th style="width: 120px;">Status</th>
+                                <th style="width: 130px;">Kapasitas (MW)</th>
+                                <th>Keterangan</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td colspan="5" class="loading">Memuat data...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="table-legend">
+                    <h4>Keterangan Status:</h4>
+                    <div class="legend-items">
+                        <div class="legend-item">
+                            <span class="status-active">Aktif</span>
+                            <span>Sistem beroperasi normal</span>
+                        </div>
+                        <div class="legend-item">
+                            <span class="status-maintenance">Maintenance</span>
+                            <span>Sedang dalam pemeliharaan</span>
+                        </div>
+                        <div class="legend-item">
+                            <span class="status-inactive">Inactive</span>
+                            <span>Sistem tidak beroperasi</span>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
 
