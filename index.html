@@ -4,106 +4,38 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PJ BATUR</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <!-- Header -->
-    <div class="header">
+    <header>
         <h1>PJ BATUR</h1>
-        <div class="admin-controls" id="adminControls">
-            <button class="btn btn-warning" id="loginBtn">Kegiatan dan Monitoring Pekerjaan</button>
-            <div id="adminActions" style="display: none;">
-                <button class="btn btn-success" id="addDataBtn">Tambah Data</button>
-                <button class="btn btn-warning" id="updateBtn">Update CSV</button>
-                <button class="btn btn-danger" id="logoutBtn">Logout</button>
-            </div>
+        <div class="menu-toggle" id="mobile-menu">
+            <span class="bar"></span>
+            <span class="bar"></span>
+            <span class="bar"></span>
         </div>
-    </div>
-    <!-- Navbar -->
-    <div class="navbar">
-        <a href="#">Urban</a>
-        <a href="#">Patroli</a>
-        <a href="#">Mandorline</a>
-        <a href="#">Pemadaman</a>
-    </div>
-    <!-- Main Content -->
-    <div class="container">
-        <table id="dataTable">
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Nama</th>
-                    <th>Tanggal</th>
-                    <th>Deskripsi</th>
-                    <th>Lokasi</th>
-                    <th>Status</th>
-                    <th id="actionHeader">Aksi</th>
-                </tr>
-            </thead>
-            <tbody id="tableBody">
-                <!-- Data akan dimuat di sini -->
-            </tbody>
-        </table>
-    </div>
-    <!-- Login Modal -->
-    <div id="loginModal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2>Login Admin</h2>
-                <span class="close">&times;</span>
-            </div>
-            <form id="loginForm">
-                <div class="form-group">
-                    <label for="username">Username</label>
-                    <input type="text" id="username" required>
-                </div>
-                <div class="form-group">
-                    <label for="password">Password</label>
-                    <input type="password" id="password" required>
-                </div>
-                <div class="form-actions">
-                    <button type="button" class="btn btn-danger" id="cancelLogin">Batal</button>
-                    <button type="submit" class="btn btn-primary">Login</button>
-                </div>
-            </form>
-        </div>
-    </div>
-    <!-- Add/Edit Modal -->
-    <div id="dataModal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2 id="modalTitle">Tambah Data Baru</h2>
-                <span class="close">&times;</span>
-            </div>
-            <form id="dataForm">
-                <input type="hidden" id="editIndex">
-                <div class="form-group">
-                    <label for="dataName">Nama</label>
-                    <input type="text" id="dataName" required>
-                </div>
-                <div class="form-group">
-                    <label for="dataDate">Tanggal</label>
-                    <input type="date" id="dataDate" required>
-                </div>
-                <div class="form-group">
-                    <label for="dataDesc">Deskripsi</label>
-                    <textarea id="dataDesc" rows="3" required></textarea>
-                </div>
-                <div class="form-group">
-                    <label for="dataStatus">Status</label>
-                    <select id="dataStatus" required>
-                        <option value="Pending">Pending</option>
-                        <option value="Dalam Proses">Dalam Proses</option>
-                        <option value="Selesai">Selesai</option>
-                    </select>
-                </div>
-                <div class="form-actions">
-                    <button type="button" class="btn btn-danger" id="cancelModal">Batal</button>
-                    <button type="submit" class="btn btn-primary">Simpan</button>
-                </div>
-            </form>
-        </div>
-    </div>
-    <script src="app.js"></script>
+        <nav class="nav">
+            <ul>
+                <li><a href="#patroli-row">Patroli ROW</a></li>
+                <li><a href="#urban">Urban</a></li>
+                <li><a href="#mandorline">Mandorline</a></li>
+                <li><a href="#pemadaman">Pemadaman</a></li>
+                <li><a href="#kct">KCT</a></li>
+                <li><a href="#vkln">VKRN</a></li>
+                <li><a href="#ct-gambar">CT Dengan Gambar</a></li>
+                <li><a href="#ct-manual">CT Manual</a></li>
+                <li><a href="#k3">K3</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section id="patroli-row">
+            <img src="batur.jpg" alt="Batur" style="width: 100%;">
+        </section>
+        <!-- Tambahkan bagian lain sesuai kebutuhan -->
+    </main>
+
+    <script src="script.js"></script>
 </body>
 </html>
