@@ -1,31 +1,46 @@
-body {
+* {
     margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
     font-family: Arial, sans-serif;
     background-color: white;
     color: black;
+    line-height: 1.6;
+}
+
+.container {
+    width: 95%;
+    margin: 0 auto;
+    max-width: 1200px;
 }
 
 header {
-    background-color: #007BFF; /* Biru */
+    background: linear-gradient(135deg, #007BFF, #87CEEB);
     color: white;
-    padding: 10px 20px;
+    padding: 15px 0;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+header .container {
     display: flex;
     justify-content: space-between;
     align-items: center;
 }
 
 h1 {
-    margin: 0;
-}
-
-.nav {
-    display: none; /* Sembunyikan menu secara default */
+    color: #FFD700; /* Gold */
+    font-size: 1.8rem;
+    font-weight: bold;
 }
 
 .menu-toggle {
     display: flex;
     flex-direction: column;
     cursor: pointer;
+    padding: 5px;
 }
 
 .bar {
@@ -33,38 +48,423 @@ h1 {
     width: 25px;
     background-color: white;
     margin: 3px 0;
+    transition: 0.3s;
 }
 
-nav ul {
+.nav {
+    position: fixed;
+    top: 0;
+    right: -300px;
+    width: 280px;
+    height: 100vh;
+    background: linear-gradient(180deg, #007BFF, #0056b3);
+    transition: right 0.3s ease;
+    z-index: 1000;
+    padding-top: 60px;
+    box-shadow: -2px 0 10px rgba(0,0,0,0.3);
+}
+
+.nav.active {
+    right: 0;
+}
+
+.nav ul {
     list-style: none;
-    padding: 0;
+    padding: 20px 0;
 }
 
-nav ul li {
-    padding: 10px 0;
+.nav ul li {
+    border-bottom: 1px solid rgba(255,255,255,0.1);
 }
 
-nav ul li a {
+.nav ul li a {
     color: white;
     text-decoration: none;
+    display: block;
+    padding: 15px 25px;
+    transition: background-color 0.3s;
 }
 
+.nav ul li a:hover {
+    background-color: rgba(255,255,255,0.1);
+    color: #FFD700;
+}
+
+main {
+    padding: 20px 0;
+    min-height: calc(100vh - 80px);
+}
+
+.content-section {
+    display: none;
+    animation: fadeIn 0.5s ease-in;
+}
+
+.content-section.active {
+    display: block;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.content-section h2 {
+    color: #007BFF;
+    margin-bottom: 20px;
+    border-bottom: 2px solid #FFD700;
+    padding-bottom: 10px;
+}
+
+.image-container {
+    text-align: center;
+    margin: 20px 0;
+}
+
+.zoomable-image {
+    width: 100%;
+    max-width: 100%;
+    height: auto;
+    cursor: zoom-in;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    transition: transform 0.3s ease;
+}
+
+.zoomable-image:hover {
+    transform: scale(1.02);
+}
+
+/* Modal untuk zoom gambar */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 2000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.9);
+    overflow: auto;
+}
+
+.modal-content {
+    margin: auto;
+    display: block;
+    max-width: 90%;
+    max-height: 80%;
+    transition: transform 0.3s ease;
+    cursor: grab;
+}
+
+.modal-content:active {
+    cursor: grabbing;
+}
+
+.close {
+    position: absolute;
+    top: 15px;
+    right: 35px;
+    color: #FFD700;
+    font-size: 40px;
+    font-weight: bold;
+    cursor: pointer;
+    z-index: 2001;
+}
+
+.close:hover {
+    color: white;
+}
+
+.zoom-controls {
+    position: fixed;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 10px;
+    z-index: 2001;
+}
+
+.zoom-controls button {
+    background-color: #007BFF;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s;
+}
+
+.zoom-controls button:hover {
+    background-color: #0056b3;
+}
+
+/* Responsive Design */
 @media (max-width: 768px) {
+    h1 {
+        font-size: 1.5rem;
+    }
+    
     .nav {
-        display: block; /* Tampilkan menu pada layar kecil */
-        position: absolute;
-        right: 0;
-        background-color: #007BFF; /* Biru */
-        width: 200px;
-        top: 60px;
-        display: none; /* Sembunyikan menu secara default */
+        width: 250px;
     }
+    
+    .modal-content {
+        max-width: 95%;
+        max-height: 70%;
+    }
+    
+    .zoom-controls {
+        bottom: 20px;
+    }
+    
+    .zoom-controls button {
+        padding: 8px 12px;
+        font-size: 14px;
+    }
+}
 
-    .nav.active {
-        display: block; /* Tampilkan menu jika aktif */
+@media (max-width: 480px) {
+    .container {
+        width: 98%;
     }
+    
+    h1 {
+        font-size: 1.3rem;
+    }
+    
+    .nav {
+        width: 220px;
+    }
+    
+    .nav ul li a {
+        padding: 12px 20px;
+        font-size: 14px;
+    }
+}
+/* CSS sebelumnya tetap sama, tambahkan yang berikut */
 
-    .menu-toggle {
-        display: flex;
+/* Table Styles */
+.table-container {
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    overflow: hidden;
+    margin: 20px 0;
+}
+
+.table-header {
+    background: linear-gradient(135deg, #007BFF, #87CEEB);
+    color: white;
+    padding: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+.table-header h3 {
+    margin: 0;
+    color: #FFD700;
+    font-size: 1.5rem;
+}
+
+.table-controls {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+#searchInput {
+    padding: 8px 15px;
+    border: none;
+    border-radius: 25px;
+    outline: none;
+    font-size: 14px;
+    width: 200px;
+    background: rgba(255,255,255,0.9);
+}
+
+.export-btn {
+    background-color: #FFD700;
+    color: #007BFF;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: all 0.3s ease;
+}
+
+.export-btn:hover {
+    background-color: #FFC107;
+    transform: translateY(-2px);
+}
+
+.table-wrapper {
+    overflow-x: auto;
+    max-height: 600px;
+    overflow-y: auto;
+}
+
+.data-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+    background: white;
+}
+
+.data-table thead {
+    background: linear-gradient(135deg, #0056b3, #007BFF);
+    color: white;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+.data-table th {
+    padding: 15px 12px;
+    text-align: left;
+    font-weight: bold;
+    border-right: 1px solid rgba(255,255,255,0.3);
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.data-table th:last-child {
+    border-right: none;
+}
+
+.data-table td {
+    padding: 12px;
+    border-bottom: 1px solid #e0e0e0;
+    border-right: 1px solid #e0e0e0;
+    transition: background-color 0.3s ease;
+}
+
+.data-table td:last-child {
+    border-right: none;
+}
+
+/* Kolom 3 dan 4 rata tengah */
+.data-table td:nth-child(3),
+.data-table td:nth-child(4),
+.data-table th:nth-child(3),
+.data-table th:nth-child(4) {
+    text-align: center;
+}
+
+.data-table tbody tr:nth-child(even) {
+    background-color: #f8f9fa;
+}
+
+.data-table tbody tr:hover {
+    background-color: #e3f2fd;
+    transform: scale(1.01);
+    box-shadow: 0 2px 8px rgba(0,123,255,0.2);
+}
+
+.table-info {
+    padding: 15px 20px;
+    background: #f8f9fa;
+    border-top: 1px solid #e0e0e0;
+    color: #666;
+    font-size: 14px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* Loading animation */
+.loading {
+    text-align: center;
+    padding: 40px;
+    color: #007BFF;
+}
+
+.loading::after {
+    content: '';
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    border: 3px solid #f3f3f3;
+    border-top: 3px solid #007BFF;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin-left: 10px;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Error state */
+.error {
+    text-align: center;
+    padding: 40px;
+    color: #dc3545;
+    background: #f8d7da;
+    border: 1px solid #f5c6cb;
+    border-radius: 5px;
+    margin: 20px 0;
+}
+
+/* Responsive table */
+@media (max-width: 768px) {
+    .table-header {
+        flex-direction: column;
+        align-items: stretch;
+        text-align: center;
     }
+    
+    .table-controls {
+        justify-content: center;
+    }
+    
+    #searchInput {
+        width: 100%;
+        max-width: 300px;
+    }
+    
+    .data-table {
+        font-size: 12px;
+    }
+    
+    .data-table th,
+    .data-table td {
+        padding: 8px 6px;
+    }
+    
+    .table-info {
+        flex-direction: column;
+        gap: 10px;
+        text-align: center;
+    }
+}
+
+@media (max-width: 480px) {
+    .data-table {
+        font-size: 11px;
+    }
+    
+    .data-table th,
+    .data-table td {
+        padding: 6px 4px;
+    }
+    
+    .table-header h3 {
+        font-size: 1.2rem;
+    }
+}
+
+/* Highlight search results */
+.highlight {
+    background-color: #ffeb3b !important;
+    font-weight: bold;
 }
