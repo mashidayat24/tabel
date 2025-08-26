@@ -159,6 +159,127 @@ body {
     box-shadow: 0 3px 15px rgba(0,0,0,0.2);
 }
 
+/* Table Styling */
+.table-container {
+    margin: 20px 0;
+    overflow-x: auto;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+
+.data-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+    border-radius: 10px;
+    overflow: hidden;
+    font-size: 14px;
+}
+
+.data-table thead {
+    background: linear-gradient(45deg, #1e3c72 0%, #2a5298 100%);
+    color: white;
+}
+
+.data-table th {
+    padding: 15px 12px;
+    text-align: left;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border-right: 1px solid rgba(255,255,255,0.2);
+    position: relative;
+}
+
+.data-table th:last-child {
+    border-right: none;
+}
+
+.data-table td {
+    padding: 12px;
+    border-bottom: 1px solid #e0e0e0;
+    border-right: 1px solid #e0e0e0;
+    transition: background-color 0.3s ease;
+}
+
+.data-table td:last-child {
+    border-right: none;
+}
+
+/* Kolom ke-3 dan ke-4 rata tengah */
+.data-table td:nth-child(3),
+.data-table td:nth-child(4),
+.data-table th:nth-child(3),
+.data-table th:nth-child(4) {
+    text-align: center;
+}
+
+.data-table tbody tr:hover {
+    background-color: #f8f9ff;
+    transform: scale(1.01);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.data-table tbody tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+.data-table tbody tr:nth-child(even):hover {
+    background-color: #f0f2ff;
+}
+
+/* Status styling */
+.status-active {
+    background: #4CAF50;
+    color: white;
+    padding: 4px 8px;
+    border-radius: 15px;
+    font-size: 12px;
+    font-weight: 500;
+}
+
+.status-inactive {
+    background: #f44336;
+    color: white;
+    padding: 4px 8px;
+    border-radius: 15px;
+    font-size: 12px;
+    font-weight: 500;
+}
+
+.status-maintenance {
+    background: #ff9800;
+    color: white;
+    padding: 4px 8px;
+    border-radius: 15px;
+    font-size: 12px;
+    font-weight: 500;
+}
+
+/* Loading animation */
+.loading {
+    text-align: center;
+    padding: 20px;
+    color: #666;
+}
+
+.loading::after {
+    content: '';
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    border: 3px solid #f3f3f3;
+    border-top: 3px solid #1e3c72;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin-left: 10px;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
 /* Animations */
 @keyframes fadeIn {
     from {
@@ -188,5 +309,42 @@ body {
     
     .page {
         padding: 20px;
+    }
+    
+    /* Responsive table */
+    .data-table {
+        font-size: 12px;
+    }
+    
+    .data-table th,
+    .data-table td {
+        padding: 8px 6px;
+    }
+    
+    .table-container {
+        margin: 10px -15px;
+    }
+    
+    .status-active,
+    .status-inactive,
+    .status-maintenance {
+        font-size: 10px;
+        padding: 3px 6px;
+    }
+}
+
+@media (max-width: 480px) {
+    .data-table th,
+    .data-table td {
+        padding: 6px 4px;
+        font-size: 11px;
+    }
+    
+    .page h2 {
+        font-size: 22px;
+    }
+    
+    .table-container {
+        margin: 10px -20px;
     }
 }
