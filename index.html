@@ -8,113 +8,64 @@
 </head>
 <body>
     <header>
-        <div class="container">
-            <h1>PJ BATUR</h1>
-            <div class="menu-toggle" id="mobile-menu">
-                <span class="bar"></span>
-                <span class="bar"></span>
-                <span class="bar"></span>
-            </div>
+        <h1>PJ BATUR</h1>
+        <div class="menu-toggle" id="mobile-menu">
+            <span class="bar"></span>
+            <span class="bar"></span>
+            <span class="bar"></span>
         </div>
-        <nav class="nav" id="nav-menu">
+        <nav class="navbar">
             <ul>
-                <li><a href="#patroli-row" onclick="showSection('patroli-row')">Patroli ROW</a></li>
-                <li><a href="#urban" onclick="showSection('urban')">Urban</a></li>
-                <li><a href="#mandorline" onclick="showSection('mandorline')">Mandorline</a></li>
-                <li><a href="#pemadaman" onclick="showSection('pemadaman')">Pemadaman</a></li>
-                <li><a href="#kct" onclick="showSection('kct')">KCT</a></li>
-                <li><a href="#vkrn" onclick="showSection('vkrn')">VKRN</a></li>
-                <li><a href="#ct-gambar" onclick="showSection('ct-gambar')">CT Dengan Gambar</a></li>
-                <li><a href="#ct-manual" onclick="showSection('ct-manual')">CT Manual</a></li>
-                <li><a href="#k3" onclick="showSection('k3')">K3</a></li>
+                <li><a href="#patroli-row">Patroli ROW</a></li>
+                <li><a href="#urban">Urban</a></li>
+                <li><a href="#mandorline">Mandorline</a></li>
+                <li><a href="#pemadaman">Pemadaman</a></li>
+                <li><a href="#kct">KCT</a></li>
+                <li><a href="#vkln">VKRN</a></li>
+                <li><a href="#ct-gambar">CT Dengan Gambar</a></li>
+                <li><a href="#ct-manual">CT Manual</a></li>
+                <li><a href="#k3">K3</a></li>
             </ul>
         </nav>
     </header>
-
-    <main class="container">
-        <section id="patroli-row" class="content-section active">
+    <main>
+        <section id="patroli-row">
             <h2>Patroli ROW</h2>
-            <div class="image-container">
-                <img src="batur.jpg" alt="Batur" class="zoomable-image" onclick="openModal(this)">
-            </div>
+            <p>Konten untuk Patroli ROW.</p>
         </section>
-
-        <section id="urban" class="content-section">
+        <section id="urban">
             <h2>Urban</h2>
-            <div class="table-container">
-                <div class="table-header">
-                    <h3>Data Urban</h3>
-                    <div class="table-controls">
-                        <input type="text" id="searchInput" placeholder="Cari data..." onkeyup="searchTable()">
-                        <button onclick="exportTable()" class="export-btn">Export CSV</button>
-                    </div>
-                </div>
-                <div class="table-wrapper">
-                    <table id="urbanTable" class="data-table">
-                        <thead>
-                            <tr id="tableHeader">
-                                <!-- Header akan diisi oleh JavaScript -->
-                            </tr>
-                        </thead>
-                        <tbody id="tableBody">
-                            <!-- Data akan diisi oleh JavaScript -->
-                        </tbody>
-                    </table>
-                </div>
-                <div class="table-info">
-                    <span id="tableInfo">Memuat data...</span>
-                </div>
-            </div>
+            <p>Konten untuk Urban.</p>
         </section>
-
-        <!-- Section lainnya tetap sama -->
-        <section id="mandorline" class="content-section">
+        <section id="mandorline">
             <h2>Mandorline</h2>
-            <p>Konten Mandorline akan ditampilkan di sini.</p>
+            <p>Konten untuk Mandorline.</p>
         </section>
-
-        <section id="pemadaman" class="content-section">
+        <section id="pemadaman">
             <h2>Pemadaman</h2>
-            <p>Konten Pemadaman akan ditampilkan di sini.</p>
+            <p>Konten untuk Pemadaman.</p>
         </section>
-
-        <section id="kct" class="content-section">
+        <section id="kct">
             <h2>KCT</h2>
-            <p>Konten KCT akan ditampilkan di sini.</p>
+            <p>Konten untuk KCT.</p>
         </section>
-
-        <section id="vkrn" class="content-section">
+        <section id="vkln">
             <h2>VKRN</h2>
-            <p>Konten VKRN akan ditampilkan di sini.</p>
+            <p>Konten untuk VKRN.</p>
         </section>
-
-        <section id="ct-gambar" class="content-section">
+        <section id="ct-gambar">
             <h2>CT Dengan Gambar</h2>
-            <p>Konten CT Dengan Gambar akan ditampilkan di sini.</p>
+            <p>Konten untuk CT Dengan Gambar.</p>
         </section>
-
-        <section id="ct-manual" class="content-section">
+        <section id="ct-manual">
             <h2>CT Manual</h2>
-            <p>Konten CT Manual akan ditampilkan di sini.</p>
+            <p>Konten untuk CT Manual.</p>
         </section>
-
-        <section id="k3" class="content-section">
+        <section id="k3">
             <h2>K3</h2>
-            <p>Konten K3 akan ditampilkan di sini.</p>
+            <p>Konten untuk K3.</p>
         </section>
     </main>
-
-    <!-- Modal untuk zoom gambar -->
-    <div id="imageModal" class="modal">
-        <span class="close" onclick="closeModal()">&times;</span>
-        <img class="modal-content" id="modalImage">
-        <div class="zoom-controls">
-            <button onclick="zoomIn()">+</button>
-            <button onclick="zoomOut()">-</button>
-            <button onclick="resetZoom()">Reset</button>
-        </div>
-    </div>
-
     <script src="script.js"></script>
 </body>
 </html>
