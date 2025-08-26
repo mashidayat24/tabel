@@ -4,335 +4,120 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PJ BATUR</title>
-    <link rel="stylesheet" href="styles.css">
-    <!-- Tesseract.js untuk OCR -->
-    <script src="https://unpkg.com/tesseract.js@v2.1.0/dist/tesseract.min.js"></script>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="container">
-        <nav class="navbar">
-            <div class="menu-toggle" id="menu-toggle">
-                &#9776; <!-- Hamburger icon -->
+    <!-- Header -->
+    <div class="header">
+        <div class="title">PJ BATUR</div>
+        <div class="hamburger" onclick="toggleMenu()">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+    </div>
+
+    <!-- Overlay -->
+    <div class="overlay" onclick="closeMenu()"></div>
+
+    <!-- Side Menu -->
+    <div class="side-menu">
+        <a href="#" class="menu-item active" onclick="showPage('patroli-row')">Patroli ROW</a>
+        <a href="#" class="menu-item" onclick="showPage('urban')">Urban</a>
+        <a href="#" class="menu-item" onclick="showPage('mandorline')">Mandorline</a>
+        <a href="#" class="menu-item" onclick="showPage('pemadaman')">Pemadaman</a>
+        <a href="#" class="menu-item" onclick="showPage('kct')">KCT</a>
+        <a href="#" class="menu-item" onclick="showPage('vkrn')">VKRN</a>
+        <a href="#" class="menu-item" onclick="showPage('ct-gambar')">CT Dengan Gambar</a>
+        <a href="#" class="menu-item" onclick="showPage('ct-manual')">CT Manual</a>
+        <a href="#" class="menu-item" onclick="showPage('k3')">K3</a>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Patroli ROW Page -->
+        <div class="page active" id="patroli-row">
+            <h2>Patroli ROW</h2>
+            <div class="page-content">
+                <img src="batur.jpg" alt="Batur" style="width: 100%; max-width: 600px; display: block; margin: 0 auto;">
+                <p>Halaman Patroli ROW (Right of Way) - Sistem patroli untuk pemantauan jalur transmisi dan distribusi listrik.</p>
+                <p>Patroli ROW merupakan kegiatan rutin untuk memastikan keamanan dan keandalan sistem kelistrikan dengan melakukan inspeksi sepanjang jalur transmisi.</p>
             </div>
-            <ul class="menu" id="menu">
-                <li><a href="#" onclick="showPage('patroli-row')">Patroli ROW</a></li>
-                <li><a href="#" onclick="showPage('urban')">Urban</a></li>
-                <li><a href="#" onclick="showPage('mandorline')">Mandorline</a></li>
-                <li><a href="#" onclick="showPage('pemadaman')">Pemadaman</a></li>
-                <li><a href="#" onclick="openKCT()">KCT</a></li>
-                <li><a href="#" onclick="showPage('vkrn')">VKRN</a></li>
-                <li><a href="#" onclick="showPage('ct-gambar')">CT Dengan Gambar</a></li>
-                <li><a href="#" onclick="showPage('ct-manual')">CT Manual</a></li>
-                <li><a href="#" onclick="showPage('k3')">K3</a></li>
-            </ul>
-        </nav>
-        
-        <div class="content" id="content">
-            <!-- Halaman Patroli ROW -->
-            <section id="patroli-row" class="page active">
-                <h1>Patroli ROW</h1>
-                <img src="batur.jpg" alt="Batur" class="image">
-            </section>
+        </div>
 
-            <!-- Halaman Urban -->
-            <section id="urban" class="page">
-                <h1>Urban</h1>
-                <div class="table-container">
-                    <table id="urban-table" class="data-table">
-                        <thead>
-                            <tr id="urban-table-header">
-                                <!-- Header akan diisi oleh JavaScript -->
-                            </tr>
-                        </thead>
-                        <tbody id="urban-table-body">
-                            <!-- Data akan diisi oleh JavaScript -->
-                        </tbody>
-                    </table>
-                </div>
-                <div class="loading" id="urban-loading">Memuat data...</div>
-            </section>
+        <!-- Urban Page -->
+        <div class="page" id="urban">
+            <h2>Urban</h2>
+            <div class="page-content">
+                <p>Halaman Urban - Pengelolaan sistem kelistrikan di area perkotaan.</p>
+                <p>Sistem urban mencakup pengelolaan infrastruktur listrik di daerah padat penduduk dengan kompleksitas tinggi.</p>
+            </div>
+        </div>
 
-            <!-- Halaman Mandorline -->
-            <section id="mandorline" class="page">
-                <h1>Mandorline</h1>
-                <div class="table-container">
-                    <table id="mandorline-table" class="data-table">
-                        <thead>
-                            <tr id="mandorline-table-header">
-                                <!-- Header akan diisi oleh JavaScript -->
-                            </tr>
-                        </thead>
-                        <tbody id="mandorline-table-body">
-                            <!-- Data akan diisi oleh JavaScript -->
-                        </tbody>
-                    </table>
-                </div>
-                <div class="loading" id="mandorline-loading">Memuat data...</div>
-            </section>
+        <!-- Mandorline Page -->
+        <div class="page" id="mandorline">
+            <h2>Mandorline</h2>
+            <div class="page-content">
+                <p>Halaman Mandorline - Sistem pengawasan dan koordinasi mandor lapangan.</p>
+                <p>Platform untuk koordinasi dan monitoring aktivitas mandor di lapangan secara real-time.</p>
+            </div>
+        </div>
 
-            <!-- Halaman Pemadaman -->
-            <section id="pemadaman" class="page">
-                <h1>Pemadaman</h1>
-                <div class="table-container">
-                    <table id="pemadaman-table" class="data-table">
-                        <thead>
-                            <tr id="pemadaman-table-header">
-                                <!-- Header akan diisi oleh JavaScript -->
-                            </tr>
-                        </thead>
-                        <tbody id="pemadaman-table-body">
-                            <!-- Data akan diisi oleh JavaScript -->
-                        </tbody>
-                    </table>
-                </div>
-                <div class="loading" id="pemadaman-loading">Memuat data...</div>
-            </section>
+        <!-- Pemadaman Page -->
+        <div class="page" id="pemadaman">
+            <h2>Pemadaman</h2>
+            <div class="page-content">
+                <p>Halaman Pemadaman - Manajemen jadwal dan koordinasi pemadaman listrik.</p>
+                <p>Sistem untuk merencanakan, mengkoordinasikan, dan memantau kegiatan pemadaman listrik terencana maupun darurat.</p>
+            </div>
+        </div>
 
-            <!-- Halaman KCT -->
-            <section id="kct" class="page">
-                <h1>KCT</h1>
-                <div class="external-container">
-                    <div class="external-info">
-                        <p>Halaman KCT akan membuka di tab baru</p>
-                        <button class="external-button" onclick="openKCT()">
-                            <span class="external-icon">🔗</span>
-                            Buka KCT
-                        </button>
-                    </div>
-                    <div class="external-preview">
-                        <p>Preview akan mengarahkan ke:</p>
-                        <a href="https://pdpjpwt.my.id/" target="_blank" class="external-link">
-                            https://pdpjpwt.my.id/
-                        </a>
-                    </div>
-                </div>
-            </section>
+        <!-- KCT Page -->
+        <div class="page" id="kct">
+            <h2>KCT</h2>
+            <div class="page-content">
+                <p>Halaman KCT (Koordinasi Control Transmisi) - Sistem koordinasi kontrol transmisi.</p>
+                <p>Platform untuk koordinasi dan kontrol sistem transmisi tenaga listrik secara terpusat.</p>
+            </div>
+        </div>
 
-            <!-- Halaman VKRN -->
-            <section id="vkrn" class="page">
-                <h1>VKRN</h1>
-                <div class="vkrn-container">
-                    <div class="vkrn-info">
-                        <h2>Voltage Key Remote Network</h2>
-                        <p>Sistem monitoring dan kontrol jaringan tegangan secara remote</p>
-                    </div>
-                    
-                    <div class="vkrn-features">
-                        <div class="feature-card">
-                            <div class="feature-icon">📊</div>
-                            <h3>Monitoring Real-time</h3>
-                            <p>Pantau status jaringan secara langsung</p>
-                        </div>
-                        <div class="feature-card">
-                            <div class="feature-icon">🔧</div>
-                            <h3>Remote Control</h3>
-                            <p>Kontrol perangkat dari jarak jauh</p>
-                        </div>
-                        <div class="feature-card">
-                            <div class="feature-icon">⚡</div>
-                            <h3>Voltage Management</h3>
-                            <p>Kelola tegangan jaringan dengan efisien</p>
-                        </div>
-                    </div>
+        <!-- VKRN Page -->
+        <div class="page" id="vkrn">
+            <h2>VKRN</h2>
+            <div class="page-content">
+                <p>Halaman VKRN - Sistem monitoring dan kontrol jaringan.</p>
+                <p>Aplikasi untuk pemantauan kondisi jaringan listrik dan sistem kontrol otomatis.</p>
+            </div>
+        </div>
 
-                    <div class="vkrn-action">
-                        <button class="vkrn-button" onclick="openVKRN()">
-                            <span class="vkrn-icon">🔍</span>
-                            Cek VKRN
-                        </button>
-                    </div>
+        <!-- CT Dengan Gambar Page -->
+        <div class="page" id="ct-gambar">
+            <h2>CT Dengan Gambar</h2>
+            <div class="page-content">
+                <p>Halaman CT Dengan Gambar - Current Transformer dengan dokumentasi visual.</p>
+                <p>Sistem dokumentasi dan monitoring Current Transformer dilengkapi dengan gambar dan diagram visual.</p>
+            </div>
+        </div>
 
-                    <div class="vkrn-preview">
-                        <p>Sistem VKRN tersedia di:</p>
-                        <a href="https://tewbo.my.id/" target="_blank" class="vkrn-link">
-                            https://tewbo.my.id/
-                        </a>
-                    </div>
-                </div>
-            </section>
+        <!-- CT Manual Page -->
+        <div class="page" id="ct-manual">
+            <h2>CT Manual</h2>
+            <div class="page-content">
+                <p>Halaman CT Manual - Panduan manual Current Transformer.</p>
+                <p>Dokumentasi lengkap dan panduan pengoperasian Current Transformer secara manual.</p>
+            </div>
+        </div>
 
-            <!-- Halaman CT Dengan Gambar -->
-            <section id="ct-gambar" class="page">
-                <h1>CT Dengan Gambar</h1>
-                <div class="ct-container">
-                    <div class="ct-info">
-                        <h2>Clear Temper dengan OCR</h2>
-                        <p>Upload gambar meter untuk ekstraksi data otomatis</p>
-                    </div>
+        <!-- K3 Page -->
+        <div class="page" id="k3">
+            <h2>K3</h2>
+            <div class="page-content">
+                <p>Halaman K3 (Keselamatan dan Kesehatan Kerja) - Sistem manajemen keselamatan kerja.</p>
+                <p>Platform untuk mengelola aspek keselamatan dan kesehatan kerja di lingkungan operasional kelistrikan.</p>
+            </div>
+        </div>
+    </div>
 
-                    <div class="upload-section">
-                        <div class="upload-area" id="upload-area">
-                            <div class="upload-icon">📷</div>
-                            <p>Klik atau drag gambar ke sini</p>
-                            <input type="file" id="image-input" accept="image/*" style="display: none;">
-                            <button class="upload-btn" onclick="document.getElementById('image-input').click()">
-                                Pilih Gambar
-                            </button>
-                        </div>
-                    </div>
-
-                    <div class="preview-section" id="preview-section" style="display: none;">
-                        <h3>Preview Gambar</h3>
-                        <img id="preview-image" class="preview-img" alt="Preview">
-                        <button class="process-btn" onclick="processImage()">
-                            <span class="process-icon">🔍</span>
-                            Proses OCR
-                        </button>
-                    </div>
-
-                    <div class="loading-section" id="loading-section" style="display: none;">
-                        <div class="ocr-loading">
-                            <div class="spinner"></div>
-                            <p>Memproses gambar dengan OCR...</p>
-                            <div class="progress-bar">
-                                <div class="progress-fill" id="progress-fill"></div>
-                            </div>
-                            <span class="progress-text" id="progress-text">0%</span>
-                        </div>
-                    </div>
-
-                    <div class="result-section" id="result-section" style="display: none;">
-                        <h3>Hasil Ekstraksi</h3>
-                        <div class="result-data">
-                            <div class="data-field">
-                                <label>Nomor Meter (52205...):</label>
-                                <input type="text" id="meter-number" readonly>
-                            </div>
-                            <div class="data-field">
-                                <label>Nomor G:</label>
-                                <input type="text" id="g-number" readonly>
-                            </div>
-                            <div class="data-field">
-                                <label>Teks Lengkap:</label>
-                                <textarea id="full-text" readonly rows="4"></textarea>
-                            </div>
-                        </div>
-                        
-                        <div class="action-buttons">
-                            <button class="edit-btn" onclick="enableEdit()">
-                                <span class="edit-icon">✏️</span>
-                                Edit Data
-                            </button>
-                            <button class="whatsapp-btn" onclick="sendToWhatsApp()">
-                                <span class="whatsapp-icon">📱</span>
-                                Kirim ke WhatsApp
-                            </button>
-                            <button class="reset-btn" onclick="resetForm()">
-                                <span class="reset-icon">🔄</span>
-                                Reset
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            <!-- Halaman CT Manual -->
-            <section id="ct-manual" class="page">
-                <h1>CT Manual</h1>
-                <div class="ct-manual-container">
-                    <div class="ct-manual-info">
-                        <h2>Clear Temper Manual</h2>
-                        <p>Input data meter secara manual untuk permintaan clear temper</p>
-                    </div>
-
-                    <div class="manual-form-section">
-                        <form class="ct-manual-form" id="ct-manual-form">
-                            <div class="form-group">
-                                <label for="manual-meter-number">
-                                    <span class="form-icon">🔢</span>
-                                    Nomor Meter
-                                </label>
-                                <input 
-                                    type="text" 
-                                    id="manual-meter-number" 
-                                    placeholder="Masukkan nomor meter..."
-                                    oninput="updatePreview()"
-                                    required
-                                >
-                            </div>
-
-                            <div class="form-group">
-                                <label for="manual-g-number">
-                                    <span class="form-icon">📋</span>
-                                    Nomor G
-                                </label>
-                                <input 
-                                    type="text" 
-                                    id="manual-g-number" 
-                                    placeholder="Masukkan nomor G..."
-                                    oninput="updatePreview()"
-                                    required
-                                >
-                            </div>
-
-                            <div class="form-preview" id="manual-preview">
-                                <h3>Preview Pesan</h3>
-                                <div class="preview-message" id="manual-preview-text">
-*FORMAT PERMINTAAN CLEAR TEMPER*
-ID Pelanggan/Nomor Meter : 
-Nomor gangguan/PK : 
-Keterangan: kwh meter periksa.
-                                </div>
-                            </div>
-
-                            <div class="form-actions">
-                                <button type="button" class="whatsapp-btn-manual" onclick="sendManualToWhatsApp()">
-                                    <span class="whatsapp-icon">📱</span>
-                                    Kirim ke WhatsApp
-                                </button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </section>
-
-            <!-- Halaman K3 -->
-            <section id="k3" class="page">
-                <h1>K3 (Keselamatan dan Kesehatan Kerja)</h1>
-                <div class="k3-container">
-                    <div class="k3-intro">
-                        <div class="k3-icon">⚠️</div>
-                        <p class="k3-description">
-                            Keselamatan dan Kesehatan Kerja (K3) adalah prioritas utama dalam setiap aktivitas pekerjaan. 
-                            Berikut adalah protokol keselamatan yang wajib dipatuhi untuk memastikan lingkungan kerja yang aman dan terkendali.
-                        </p>
-                    </div>
-
-                    <div class="k3-rules">
-                        <div class="rule-item">
-                            <div class="rule-number">1</div>
-                            <div class="rule-content">
-                                <h3>Safety Briefing</h3>
-                                <p>Melakukan <strong>Safety Briefing</strong> sebelum memulai pekerjaan untuk memastikan semua anggota tim memahami prosedur keselamatan.</p>
-                            </div>
-                        </div>
-
-                        <div class="rule-item">
-                            <div class="rule-number">2</div>
-                            <div class="rule-content">
-                                <h3>Working Permit</h3>
-                                <p>Melakukan pekerjaan berdasar dokumen <strong>Working Permit</strong> yang telah disetujui dan berlaku.</p>
-                            </div>
-                        </div>
-
-                        <div class="rule-item">
-                            <div class="rule-number">3</div>
-                            <div class="rule-content">
-                                <h3>Identifikasi Bahaya & JSA</h3>
-                                <p>Membuat dan memahami identifikasi bahaya, pengendalian risiko, dan <strong>JSA (Job Safety Analysis)</strong> pada setiap pekerjaan.</p>
-                            </div>
-                        </div>
-
-                        <div class="rule-item">
-                            <div class="rule-number">4</div>
-                            <div class="rule-content">
-                                <h3>Standard Operating Procedure</h3>
-                                <p>Memahami dan melakukan pekerjaan sesuai dengan langkah dan tahapan <strong>SOP</strong> yang telah ditetapkan.</p>
-                            </div>
-                        </div>
-
-                        <div class="rule-item">
-                            <div class="rule-number">5</div>
-                            <div class="rule-content">
-                                <h3>Alat Pelindung Diri</h3>
-                                <p>Mem
+    <script src="script.js"></script>
+</body>
+</html>
