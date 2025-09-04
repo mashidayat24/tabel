@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WhatsApp Sender App</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Inter dari Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f0f4f8;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 min-h-screen flex items-center justify-center p-4">
+
+<div class="bg-white rounded-xl shadow-lg p-6 w-full max-w-md mx-auto">
+    <h1 class="text-3xl font-bold text-center text-gray-800 mb-2">WhatsApp Dengan Foto</h1>
+    <p class="text-center text-gray-500 mb-6">Unggah foto untuk mendeteksi nomor telepon</p>
+
+    <!-- Kotak pesan untuk notifikasi -->
+    <div id="message-box" class="hidden p-4 rounded-lg text-sm mb-4 transition-all duration-300"></div>
+
+    <!-- Area unggah file -->
+    <div id="upload-area" class="border-2 border-dashed border-gray-300 rounded-xl p-6 text-center cursor-pointer hover:border-blue-500 transition-colors duration-200">
+        <svg xmlns="http://www.w3.org/2000/svg" class="mx-auto h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-4-4v-1a4 4 0 014-4h10a4 4 0 014 4v1a4 4 0 01-4 4h-2m-4-6l-4-4m0 0L3 8m4-4v12"></path>
+        </svg>
+        <p class="mt-2 text-sm text-gray-600">Klik untuk unggah foto</p>
+        <input type="file" id="image-upload" class="hidden" accept="image/*">
+    </div>
+
+    <!-- Area progress bar -->
+    <div id="progress-container" class="mt-6 hidden">
+        <div class="relative pt-1">
+            <div class="flex mb-2 items-center justify-between">
+                <div>
+                    <span class="text-xs font-semibold inline-block py-1 px-2 uppercase rounded-full text-blue-600 bg-blue-200">
+                        Memproses OCR...
+                    </span>
+                </div>
+                <div class="text-right">
+                    <span id="progress-text" class="text-xs font-semibold inline-block text-blue-600">
+                        0%
+                    </span>
+                </div>
+            </div>
+            <div class="overflow-hidden h-2 mb-4 text-xs flex rounded-full bg-blue-200">
+                <div id="progress-bar" style="width:0%" class="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-blue-500 transition-all duration-300"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Hasil OCR dan tombol kirim -->
+    <div id="results-container" class="mt-6 hidden">
+        <h2 class="text-xl font-semibold text-gray-700 mb-2">Hasil</h2>
+        <div class="bg-gray-50 p-4 rounded-lg mb-4">
+            <p class="text-sm font-medium text-gray-500 mb-2">Foto Unggahan:</p>
+            <img id="uploaded-image" class="rounded-lg w-full max-h-64 object-contain mx-auto mb-4" alt="Foto unggahan">
+            <!-- Teks yang dideteksi sekarang disembunyikan -->
+            <!-- <p class="text-sm font-medium text-gray-500">Teks yang Dideteksi:</p>
+            <p id="extracted-text" class="text-gray-800 text-sm mt-1 break-words"></p> -->
+        </div>
+        <div class="bg-blue-50 p-4 rounded-lg flex items-center justify-between mb-4">
+            <div>
+                <p class="text-sm font-medium text-blue-600">Nomor WhatsApp Ditemukan:</p>
+                <p id="phone-number" class="text-blue-800 font-bold text-lg mt-1"></p>
+            </div>
+            <a id="whatsapp-link" href="#" class="bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded-full shadow-md transition-colors duration-300">
+                Kirim WhatsApp
+            </a>
+        </div>
+    </div>
+</div>
+
+<!-- Load Tesseract.js -->
+<script src='https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js'></script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const uploadArea = document.getElementById('upload-area');
+        const imageUpload = document.getElementById('image-upload');
+        const progressContainer = document.getElementById('progress-container');
+        const progressBar = document.getElementById('progress-bar');
+        const progressText = document.getElementById('progress-text');
+        const resultsContainer = document.getElementById('results-container');
+        // const extractedTextElem = document.getElementById('extracted-text'); // Dihapus dari variabel karena disembunyikan
+        const phoneNumberElem = document.getElementById('phone-number');
+        const whatsappLink = document.getElementById('whatsapp-link');
+        const messageBox = document.getElementById('message-box');
+        // const resetButton = document.getElementById('reset-button'); // Dihapus
+        const uploadedImage = document.getElementById('uploaded-image');
+
+        // Fungsi untuk menampilkan pesan notifikasi
+        function showMessage(message, type = 'info') {
+            let bgColor = 'bg-blue-100';
+            let textColor = 'text-blue-700';
+            if (type === 'error') {
+                bgColor = 'bg-red-100';
+                textColor = 'text-red-700';
+            }
+            messageBox.textContent = message;
+            messageBox.className = `p-4 rounded-lg text-sm mb-4 ${bgColor} ${textColor}`;
+            messageBox.classList.remove('hidden');
+        }
+
+        // Fungsi untuk menyembunyikan semua kontainer kecuali yang diperlukan
+        function resetState() {
+            uploadArea.classList.remove('hidden');
+            progressContainer.classList.add('hidden');
+            resultsContainer.classList.add('hidden');
+            messageBox.classList.add('hidden');
+            progressBar.style.width = '0%';
+            progressText.textContent = '0%';
+            // extractedTextElem.textContent = ''; // Dihapus
+            phoneNumberElem.textContent = '';
+            whatsappLink.href = '#';
+            if (uploadedImage.src) {
+                URL.revokeObjectURL(uploadedImage.src);
+                uploadedImage.src = '';
+            }
+        }
+
+        // Membuka file dialog saat area unggah diklik
+        uploadArea.addEventListener('click', () => {
+            imageUpload.click();
+        });
+
+        // Event listener saat file dipilih
+        imageUpload.addEventListener('change', async (event) => {
+            const file = event.target.files[0];
+            if (!file) {
+                return;
+            }
+
+            // Sembunyikan area unggah dan tampilkan progress
+            uploadArea.classList.add('hidden');
+            progressContainer.classList.remove('hidden');
+            
+            // Menampilkan foto yang diunggah
+            const imageUrl = URL.createObjectURL(file);
+            uploadedImage.src = imageUrl;
+
+            showMessage('Memproses gambar, harap tunggu...', 'info');
+
+            try {
+                // Proses OCR menggunakan Tesseract.js
+                const { data: { text } } = await Tesseract.recognize(
+                    file,
+                    'eng', // Menggunakan bahasa Inggris untuk karakter alfanumerik
+                    {
+                        logger: m => {
+                            if (m.progress) {
+                                const progress = Math.floor(m.progress * 100);
+                                progressBar.style.width = `${progress}%`;
+                                progressText.textContent = `${progress}%`;
+                            }
+                        }
+                    }
+                );
+
+                // Sembunyikan progress bar, tampilkan hasil
+                progressContainer.classList.add('hidden');
+                resultsContainer.classList.remove('hidden');
+                showMessage('Proses selesai!', 'info');
+
+                // Tampilkan teks yang dideteksi (meskipun tidak ditampilkan di UI)
+                // extractedTextElem.textContent = text.trim() || 'Tidak ada teks yang terdeteksi.';
+
+                // Cari nomor telepon yang diawali dengan 62
+                const phoneRegex = /\b(62[0-9]{9,12})\b/g;
+                const match = text.match(phoneRegex);
+                const foundNumber = match ? match[0] : null;
+
+                if (foundNumber) {
+                    phoneNumberElem.textContent = foundNumber;
+                    whatsappLink.href = `https://wa.me/${foundNumber}`;
+                    whatsappLink.classList.remove('hidden');
+                } else {
+                    phoneNumberElem.textContent = 'Tidak ada nomor telepon yang ditemukan.';
+                    whatsappLink.classList.add('hidden');
+                }
+
+            } catch (error) {
+                console.error("OCR Error:", error);
+                showMessage('Terjadi kesalahan saat memproses gambar. Coba lagi.', 'error');
+                resetState();
+            }
+        });
+
+        // Event listener untuk tombol reset
+        // resetButton.addEventListener('click', resetState); // Dihapus
+    });
+</script>
+
+</body>
+</html>
+
+
